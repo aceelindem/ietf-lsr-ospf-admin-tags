@@ -1,58 +1,36 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!-- This template is for creating an Internet Draft using xml2rfc,
-    which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!-- One method to get references from the online citation libraries.
-    There has to be one entity for each item to be referenced.
-    An alternate method (rfc include) is described in the references. -->
     <!ENTITY RFC2119 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'>
     <!ENTITY RFC2328 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2328.xml'>
-    <!ENTITY RFC3101 PUBLIC ''
+    <!ENTITY RFC3101 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3101.xml'>
-    <!ENTITY RFC3630 PUBLIC ''
+    <!ENTITY RFC3630 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3630.xml'>
-    <!ENTITY RFC5130 PUBLIC ''
+    <!ENTITY RFC5130 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5130.xml'>
-    <!ENTITY RFC5340 PUBLIC ''
+    <!ENTITY RFC5340 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5340.xml'>
     <!ENTITY RFC7684 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7684.xml'>
     <!ENTITY RFC8174 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml'>
-    <!ENTITY RFC8362 PUBLIC ''
+    <!ENTITY RFC8362 PUBLIC '' 
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8362.xml'>
-    <!ENTITY I-D.ietf-ospf-te-link-attr-reuse SYSTEM
-        "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-ospf-te-link-attr-reuse-10.xml">
+    <!ENTITY I-D.ietf-ospf-te-link-attr-reuse PUBLIC '' 
+      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.ietf-ospf-te-link-attr-reuse'>
     ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
-<!-- used by XSLT processors -->
-<!-- For a complete list and description of processing instructions (PIs),
-    please see http://xml.resource.org/authoring/README.html. -->
-<!-- Below are generally applicable Processing Instructions (PIs) that
-    most I-Ds might want to use.
-    (Here they are set differently than their defaults in xml2rfc v1.32) -->
-<?rfc strict="yes" ?>
-<!-- give errors regarding ID-nits and DTD validation -->
-<!-- control the table of contents (ToC) -->
-<?rfc toc="yes"?>
-<!-- generate a ToC -->
-<?rfc tocdepth="4"?>
-<!-- the number of levels of subsections in ToC. default: 3 -->
-<!-- control references -->
-<?rfc symrefs="yes"?>
-<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
-<?rfc sortrefs="yes" ?>
-<!-- sort the reference entries alphabetically -->
-<!-- control vertical white space
-    (using these PIs as follows is recommended by the RFC Editor) -->
-<?rfc compact="yes" ?>
-<!-- do not start each main section on a new page -->
+<?rfc strict="no" ?>
+<?rfc toc="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc sortrefs="yes"?>
+
+<?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
-<!-- keep one blank line between list items -->
-<!-- end of list of popular I-D processing instructions -->
-<rfc category="std" ipr="trust200902" docName="draft-acee-lsr-ospf-admin-tags-05">
+
+<rfc category="std" ipr="trust200902" docName="draft-acee-lsr-ospf-admin-tags-07">
 
 <front>
 <title abbrev="OSPF Administrative Tags">
@@ -86,10 +64,10 @@
   <date/>
   <abstract>
    <t>It is useful for routers in an OSPFv2 or OSPFv3 routing domain to be able to
-   associate tags with prefixes. 
+   associate tags with prefixes.
    Previously, OSPFv2 and OSPFv3 were relegated to a single tag for AS External and 
    Not-So-Stubby-Area (NSSA) prefixes. 
-   With the flexible encodings provided by OSPFv2 Prefix Attribute Advertisement 
+   With the flexible encodings provided by OSPFv2 Prefix/Link Attribute Advertisement 
    and OSPFv3 Extended LSAs, multiple administrative
    tags may advertised for all types of prefixes. These administrative
    tags can be used for many applications including route redistribution policy, selective
@@ -105,7 +83,7 @@
    or OSPFv3 <xref target="RFC5340"/> routing domain to be able to associate tags with prefixes.
    Previously, OSPFv3 and OSPFv3 were relegated to a single tag for AS External and 
    Not-So-Stubby-Area (NSSA) prefixes. 
-   With the flexible encodings provided by OSPFv2 Prefix Attribute Advertisement 
+   With the flexible encodings provided by OSPFv2 Prefix/Link Attribute Advertisement 
    (<xref target="RFC7684"/>) and OSPFv3 Extended LSA (<xref target="RFC8362"/>), 
    multiple administrative tags may be advertised for all types of prefixes. These administrative
    tags can be used many applications including (but not limited to): 
@@ -121,14 +99,12 @@
    specific to one version of the OSPF protocol.</t>
   <t>The ISIS protocol supports a similar mechanism that is described in RFC 5130 
   <xref target="RFC5130"/>.</t>
-  <section title="Requirements notation">
-      <section title="Requirements Language">
-       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-        NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-        "MAY", and "OPTIONAL" in this document are to be interpreted as
-        described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> 
-        when, and only when, they appear in all capitals, as shown here.</t>
-       </section>
+  <section title="Requirements Language">
+  <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+     NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+     "MAY", and "OPTIONAL" in this document are to be interpreted as
+     described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> 
+     when, and only when, they appear in all capitals, as shown here.</t>
    </section>
 </section>
 
@@ -208,7 +184,7 @@ the following TLVs specified in <xref target="RFC7684"/>:
 the following TLVs specified in <xref target="RFC8362"/>:
 <list style="numbers"> 
 <t>Inter-Area-Prefix TLV advertised in the E-Inter-Area-Prefix-LSA</t>
-<t>Intra-Area-Prefix TLV advertised in the E-Link-LSA and the E-Intra-Area-LSA</t>
+<t>Intra-Area-Prefix TLV advertised in the E-Link-LSA and the E-Intra-Area-Prefix-LSA</t>
 <t>External-Prefix TLV advertised in the E-AS-External-LSA and the E-NSSA-LSA</t>
 </list></t>
 </section>
@@ -228,7 +204,7 @@ route summaries.</t>
 32-bit tag for prefixes. An OSPF router supporting this 
 specification MAY be able to advertise and propagate multiple 32-bit tags. The 
 maximum tags that an implementation supports is a local matter depending upon supported 
-applications using the prefix tags.</t>
+applications using the prefix or link tags.</t>
 <t>When a single tag is advertised for AS External or NSSA LSA prefix, the existing tag in 
 OSPFv2 and OSPFv3 AS-External-LSA and NSSA-LSA encodings SHOULD be utilized. This will facilitate
 backward compatibilty with implementations that do not support this specification.
@@ -243,7 +219,7 @@ number of tags supported.</t>
 </section>
 
 <section title="Security Considerations">                        
-   <t>This document describes both a generic mechanism for advertising
+   <t>This document describes a generic mechanism for advertising
       administrative tags for OSPF prefixes.
       The administrative tags are generally less critical
       than the topology information currently advertised by the base 
@@ -276,19 +252,19 @@ Sub-TLV Registry <xref target="RFC8362"/>:
 <?rfc needLines="20"?>
 <back>
 <references title="Normative References">
-  &RFC2119;
-  &RFC2328;
-  &RFC3630;
-  &RFC5340;
-  &RFC7684;
-  &RFC8174;
-  &RFC8362;
+      &RFC2119;
+      &RFC2328;
+      &RFC3630;
+      &RFC5340;
+      &RFC7684;
+      &RFC8174;
+      &RFC8362;
 </references>
 
 <references title="Informative References">
- &RFC3101;
- &RFC5130;
- &I-D.ietf-ospf-te-link-attr-reuse;
+      &RFC3101;
+      &RFC5130;
+      &I-D.ietf-ospf-te-link-attr-reuse;
 </references>
 <section anchor="UINT64-TAG" title="64-Bit Administrative Tag Sub-TLV">
   <t>The definition of the 64-bit tag was considered but discard given that
@@ -308,7 +284,7 @@ that will be used as administrative tags.</t>
    |             First 64-bit Administrative Tag                   | 
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                             o                                 |
+   |                             O                                 |
                                  o
    |                             o                                 |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -331,12 +307,12 @@ that will be used as administrative tags.</t>
      </artwork> 
   </figure></t>
 </section> 
-<section anchor="LINK-TAG" title="Link Administrative Tags">
-<t>The advertisement of administrative tags corresponding to
-links has been removed from the document. The specification of advertising
-link administrative groups as specified in
- <xref target="I-D.ietf-ospf-te-link-attr-reuse"/> satisfies
-the same requirement as advertising administrative tags for links.</t> 
+<section title="Link Administrative Tags">
+   <t>The advertisement of administrative tags corresponding to links has
+   been removed from the document.  The specification of advertising
+   link administrative groups as specified in
+   <xref target="I-D.ietf-ospf-te-link-attr-reuse"/>
+   advertising administrative tags for links.</t>
 </section> 
 </back>
 </rfc>
