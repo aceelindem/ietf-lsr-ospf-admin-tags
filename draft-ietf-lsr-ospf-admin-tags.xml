@@ -32,7 +32,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-02">
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-03">
 
 <front>
 <title abbrev="OSPF Administrative Tags">
