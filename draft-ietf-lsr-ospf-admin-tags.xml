@@ -33,7 +33,7 @@
 <?rfc subcompact="no" ?>
 
 <rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-04"
-  consensus="true" submissionType="IETF" version="4">
+  consensus="true" submissionType="IETF" version="3">
 
 <front>
 <title abbrev="OSPF Administrative Tags">
@@ -82,22 +82,24 @@
 
 <middle>
 <section title="Introduction">
-   <t>It is useful for routers in an OSPFv2 <xref target="RFC2328"/>
-   or OSPFv3 <xref target="RFC5340"/> routing domain to be able to associate tags with prefixes.
-   Previously, OSPFv3 and OSPFv3 were relegated to a single tag for AS External and
-   Not-So-Stubby-Area (NSSA) prefixes.
-   With the flexible encodings provided by OSPFv2 Prefix/Link Attribute Advertisement
-   (<xref target="RFC7684"/>) and OSPFv3 Extended LSA (<xref target="RFC8362"/>),
-   multiple administrative tags may be advertised for all types of prefixes. These administrative
-   tags can be used many applications including (but not limited to):
-   <list style="numbers">
-   <t>Controlling which routes are redistributed into other protocols for
-       readvertisement.</t>
-   <t>Prioritizing selected prefixes for faster convergence and installation in the
-      forwarding plane.</t>
-   <t>Identifying selected prefixes for Loop-Free Alternative (LFA) protection.</t>
-   </list></t>
-  <t> Throughout this document, OSPF is used when the text applies to both
+  <t>
+    It is useful for routers in an OSPFv2 <xref target="RFC2328"/>
+    or OSPFv3 <xref target="RFC5340"/> routing domain to be able to associate tags with prefixes.
+    Previously, OSPFv3 and OSPFv3 were relegated to a single tag for AS External and
+    Not-So-Stubby-Area (NSSA) prefixes.
+    With the flexible encodings provided by OSPFv2 Prefix/Link Attribute Advertisement
+    (<xref target="RFC7684"/>) and OSPFv3 Extended LSA (<xref target="RFC8362"/>),
+    multiple administrative tags may be advertised for all types of prefixes. These administrative
+    tags can be used many applications including (but not limited to):
+  </t>
+  <ol spacing="normal">
+   <li>Controlling which routes are redistributed into other protocols for
+       readvertisement.</li>
+   <li>Prioritizing selected prefixes for faster convergence and installation in the
+      forwarding plane.</li>
+   <li>Identifying selected prefixes for Loop-Free Alternative (LFA) protection.</li>
+  </ol>
+  <t>Throughout this document, OSPF is used when the text applies to both
    OSPFv2 and OSPFv3.  OSPFv2 or OSPFv3 is used when the text is
    specific to one version of the OSPF protocol.</t>
   <t>The ISIS protocol supports a similar mechanism that is described in RFC 5130
@@ -117,11 +119,13 @@
    more 32-bit unsigned integers that may be associated with an
    OSPF advertised prefix. The precise usage of these tags is beyond
    the scope of this document.</t>
-   <t>The format of this Sub-TLV
-    is the same as the format used by the Traffic Engineering
-    Extensions to OSPF <xref target="RFC3630"/>.  The LSA payload consists of one or
-    more nested Type/Length/Value (TLV) triplets.  The format of
-    each TLV is:
+   <t>
+     The format of this Sub-TLV
+     is the same as the format used by the Traffic Engineering
+     Extensions to OSPF <xref target="RFC3630"/>.  The LSA payload consists of one or
+     more nested Type/Length/Value (TLV) triplets.  The format of
+     each TLV is:
+    </t>
    <figure title="TLV Format">
      <artwork>
 
@@ -134,14 +138,16 @@
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
      </artwork>
-  </figure></t>
+  </figure>
     <t>The Length field defines the length of the value portion in octets
     (thus a TLV with no value portion would have a length of 0).  The
     TLV is padded to 4-octet alignment;  padding is not included in
     the length field (so a 3-octet value would have a length of
     3, but the total size of the TLV would be 8 octets).</t>
 
- <t>The format of the 32-bit Administrative Tag TLV is as follows:
+    <t>
+      The format of the 32-bit Administrative Tag TLV is as follows:
+    </t>
 <figure title="32-bit Administrative Tag Sub-TLV">
   <artwork>
 
@@ -173,23 +179,27 @@
    Value    A variable length list of one or more administrative
             tags.
      </artwork>
-  </figure></t>
+  </figure>
    <t>This sub-TLV will carry one or more 32-bit unsigned integer values
 that will be used as administrative tags.</t>
 </section>
 <section anchor="APPLICABILTY" title="Administrative Tag Applicability">
-<t>The administrative tag TLV specified herein will be valid as a sub-TLV of
-the following TLVs specified in <xref target="RFC7684"/>:
-<list style="numbers">
-<t>Extended Prefix TLV advertised in the OSPFv2 Extended Prefix LSA</t>
-</list></t>
-<t>The administrative tag TLV specified herein will be valid as a sub-TLV of
-the following TLVs specified in <xref target="RFC8362"/>:
-<list style="numbers">
-<t>Inter-Area-Prefix TLV advertised in the E-Inter-Area-Prefix-LSA</t>
-<t>Intra-Area-Prefix TLV advertised in the E-Link-LSA and the E-Intra-Area-Prefix-LSA</t>
-<t>External-Prefix TLV advertised in the E-AS-External-LSA and the E-NSSA-LSA</t>
-</list></t>
+  <t>
+    The administrative tag TLV specified herein will be valid as a sub-TLV of
+    the following TLVs specified in <xref target="RFC7684"/>:
+  </t>
+  <ol spacing="normal">
+    <li>Extended Prefix TLV advertised in the OSPFv2 Extended Prefix LSA</li>
+  </ol>
+  <t>
+    The administrative tag TLV specified herein will be valid as a sub-TLV of
+    the following TLVs specified in <xref target="RFC8362"/>:
+  </t>
+  <ol spacing="normal">
+    <li>Inter-Area-Prefix TLV advertised in the E-Inter-Area-Prefix-LSA</li>
+    <li>Intra-Area-Prefix TLV advertised in the E-Link-LSA and the E-Intra-Area-Prefix-LSA</li>
+    <li>External-Prefix TLV advertised in the E-AS-External-LSA and the E-NSSA-LSA</li>
+  </ol>
 </section>
 <section anchor="OSPF-OPERATION" title="Protocol Operation">
 <t>An OSPF router supporting this specification MUST propagate administrative tags
@@ -240,16 +250,20 @@ number of tags supported.</t>
       in <xref target="RFC2328"/> and <xref target="RFC5340"/>.</t>
 </section>
 <section title="IANA Considerations">
-<t>The following values should be allocated from the OSPF Extended Prefix
-TLV Sub-TLV Registry <xref target="RFC7684"/>:
-<list style="symbols">
-<t>TBD - 32-bit Administrative Tag TLV</t>
-</list></t>
-<t>The following values should be allocated from the OSPFv3 Extended-LSA
-Sub-TLV Registry <xref target="RFC8362"/>:
-<list style="symbols">
-<t>TBD - 32-bit Administrative Tag TLV</t>
-</list></t>
+  <t>
+    The following values should be allocated from the OSPF Extended Prefix
+    TLV Sub-TLV Registry <xref target="RFC7684"/>:
+  </t>
+  <ul spacing="normal">
+    <li>TBD - 32-bit Administrative Tag TLV</li>
+  </ul>
+  <t>
+    The following values should be allocated from the OSPFv3 Extended-LSA
+    Sub-TLV Registry <xref target="RFC8362"/>:
+  </t>
+  <ul spacing="normal">
+    <li>TBD - 32-bit Administrative Tag TLV</li>
+  </ul>
 </section>
   <section title="Acknowledgments">
    <t>The authors of RFC 5130 are acknowledged since this document draws upon both the
@@ -282,7 +296,9 @@ Sub-TLV Registry <xref target="RFC8362"/>:
      included here for information.</t>
   <t>This sub-TLV will carry one or more 64-bit unsigned integer values
 that will be used as administrative tags.</t>
- <t>The format of the 64-bit Administrative Tag TLV is as follows:
+ <t>
+  The format of the 64-bit Administrative Tag TLV is as follows:
+ </t>
 <figure title="64-bit Administrative Tag TLV">
   <artwork>
 
@@ -315,7 +331,7 @@ that will be used as administrative tags.</t>
    Value    A variable length list of one or more 64-bit
             administrative tags.
      </artwork>
-  </figure></t>
+  </figure>
 </section>
 <section title="Link Administrative Tags">
    <t>The advertisement of administrative tags corresponding to links has
