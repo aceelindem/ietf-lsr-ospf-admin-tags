@@ -6,8 +6,6 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2328.xml'>
     <!ENTITY RFC3101 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3101.xml'>
-    <!ENTITY RFC3630 PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3630.xml'>
     <!ENTITY RFC3688 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3688.xml'>
     <!ENTITY RFC4271 PUBLIC ''
@@ -24,6 +22,8 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6242.xml'>
     <!ENTITY RFC7684 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7684.xml'>
+    <!ENTITY RFC7752 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7752.xml'>
     <!ENTITY RFC7950 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7950.xml'>
     <!ENTITY RFC8040 PUBLIC ''
@@ -36,8 +36,6 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8362.xml'>
     <!ENTITY RFC8446 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml'>
-    <!ENTITY RFC8920 PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8920.xml'>
     <!ENTITY I-D.ietf-ospf-yang PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-ospf-yang-29.xml'>
     <!ENTITY I-D.ietf-ospfv3-extended-lsa-yang PUBLIC ''
@@ -52,7 +50,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-06"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-07"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -103,13 +101,13 @@
 
   <date/>
   <abstract>
-   <t>It is useful for routers in an OSPFv2 or OSPFv3 routing domain to be able to
+   <t>It is useful for routers in OSPFv2 and OSPFv3 routing domains to be able to
    associate tags with prefixes.
-   Previously, OSPFv2 and OSPFv3 were relegated to a single tag for AS External and
-   Not-So-Stubby-Area (NSSA) prefixes.
+   Previously, OSPFv2 and OSPFv3 were relegated to a single tag and only for AS External
+   and Not-So-Stubby-Area (NSSA) prefixes.
    With the flexible encodings provided by OSPFv2 Prefix/Link Attribute Advertisement
    and OSPFv3 Extended LSAs, multiple administrative
-   tags may advertised for all types of prefixes. These administrative
+   tags may be advertised for all types of prefixes. These administrative
    tags can be used for many applications including route redistribution policy, selective
    prefix prioritization, selective IP Fast-ReRoute (IPFRR) prefix protection, and many
    others.</t>
@@ -120,18 +118,18 @@
 <middle>
 <section title="Introduction">
   <t>
-    It is useful for routers in an OSPFv2 <xref target="RFC2328"/>
-    or OSPFv3 <xref target="RFC5340"/> routing domain to be able to associate tags with prefixes.
-    Previously, OSPFv3 and OSPFv3 were relegated to a single tag for AS External and
+    It is useful for routers in OSPFv2 <xref target="RFC2328"/>
+    and OSPFv3 <xref target="RFC5340"/> routing domains to be able to associate tags with prefixes.
+    Previously, OSPFv2 and OSPFv3 were relegated to a single tag and only for AS External and
     Not-So-Stubby-Area (NSSA) prefixes.
     With the flexible encodings provided by OSPFv2 Prefix/Link Attribute Advertisement
     (<xref target="RFC7684"/>) and OSPFv3 Extended LSA (<xref target="RFC8362"/>),
     multiple administrative tags may be advertised for all types of prefixes. These administrative
-    tags can be used many applications including (but not limited to):
+    tags can be used in many applications including (but not limited to):
   </t>
   <ol spacing="normal">
    <li>Controlling which routes are redistributed into other protocols for
-       readvertisement.</li>
+       re-advertisement.</li>
    <li>Prioritizing selected prefixes for faster convergence and installation in the
       forwarding plane.</li>
    <li>Identifying selected prefixes for Loop-Free Alternative (LFA) protection.</li>
@@ -139,6 +137,9 @@
   <t>Throughout this document, OSPF is used when the text applies to both
    OSPFv2 and OSPFv3.  OSPFv2 or OSPFv3 is used when the text is
    specific to one version of the OSPF protocol.</t>
+  <t>The definition of the 64-bit tag was considered but discard given that
+     there is no strong requirement or use case. The specification is
+     included here for information.</t>
   <t>The ISIS protocol supports a similar mechanism that is described in RFC 5130
   <xref target="RFC5130"/>.</t>
   <section title="Requirements Language">
@@ -156,32 +157,6 @@
    more 32-bit unsigned integers that may be associated with an
    OSPF advertised prefix. The precise usage of these tags is beyond
    the scope of this document.</t>
-   <t>
-     The format of this Sub-TLV
-     is the same as the format used by the Traffic Engineering
-     Extensions to OSPF <xref target="RFC3630"/>.  The LSA payload consists of one or
-     more nested Type/Length/Value (TLV) triplets.  The format of
-     each TLV is:
-    </t>
-   <figure title="TLV Format">
-     <artwork>
-
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |              Type             |             Length            |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                            Value...                           |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-     </artwork>
-  </figure>
-    <t>The Length field defines the length of the value portion in octets
-    (thus a TLV with no value portion would have a length of 0).  The
-    TLV is padded to 4-octet alignment;  padding is not included in
-    the length field (so a 3-octet value would have a length of
-    3, but the total size of the TLV would be 8 octets).</t>
-
     <t>
       The format of the 32-bit Administrative Tag TLV is as follows:
     </t>
@@ -203,15 +178,13 @@
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
-   Type     A 16-bit field set to TBD. The value MAY be different
-            depending upon the IANA registry from which it is
-            allocated.
-
+   Type     A 16-bit field set to TBD.
+   
    Length   A 16-bit field that indicates the length of the value
-            portion in octets and will be a multiple of 4 octets
+            portion in octets and MUST be a multiple of 4 octets
             dependent on the number of administrative tags
-            advertised. If the sub-TLV is specified, at least one
-            administrative tag must be advertised.
+            advertised. At least one administrative tag must be
+            advertised.
 
    Value    A variable length list of one or more administrative
             tags.
@@ -234,40 +207,70 @@ that will be used as administrative tags.</t>
   </t>
   <ol spacing="normal">
     <li>Inter-Area-Prefix TLV advertised in the E-Inter-Area-Prefix-LSA</li>
-    <li>Intra-Area-Prefix TLV advertised in the E-Link-LSA and the E-Intra-Area-Prefix-LSA</li>
+    <li>Intra-Area-Prefix TLV advertised in the E-Intra-Area-Prefix-LSA.</li>
     <li>External-Prefix TLV advertised in the E-AS-External-LSA and the E-NSSA-LSA</li>
   </ol>
 </section>
 <section anchor="OSPF-OPERATION" title="Protocol Operation">
-<t>An OSPF router supporting this specification MUST propagate administrative tags
-when acting as an Area Border Router and originating summary advertisements into other
-areas. Similarly, an OSPF router supporting this specification and acting as an ABR for a
-Not-So-Stubby Area (NSSA) MUST propagate tags when translating NSSA routes to
-AS External advertisements <xref target="RFC3101"/>. The number of tags supported MAY limit
-the number of tags that are propagated. When propagating multiple tags, the order of the
-the tags must be preserved.</t>
-<t>For configured area ranges, NSSA ranges, and configurated summarization of redistributed
-routes, tags from component routes SHOULD NOT be propagated to the summary. Implementations
-SHOULD provide a mechanism to configure tags for area ranges, NSSA ranges, and redistributed
-route summaries.</t>
-<t>An OSPF router supporting this specification MUST be able to advertise and interpret one
-32-bit tag for prefixes. An OSPF router supporting this
-specification MAY be able to advertise and propagate multiple 32-bit tags. The
-maximum tags that an implementation supports is a local matter depending upon supported
-applications using the prefix or link tags.</t>
-<t>When a single tag is advertised for AS External or NSSA LSA prefix, the existing tag in
-OSPFv2 and OSPFv3 AS-External-LSA and NSSA-LSA encodings SHOULD be utilized. This will facilitate
-backward compatibility with implementations that do not support this specification.
-</t>
+  <t>An OSPF router supporting this specification MUST be able to advertise and interpret
+  at least one 32-bit tag for all type of prefixes. An OSPF router supporting this
+  specification MAY be able to advertise and propagate multiple 32-bit tags. The
+  maximum tags that an implementation supports is a local matter depending upon supported
+  applications using prefix tags.
+  </t>
+  <t>
+    When tags are advertised for AS External or NSSA LSA prefixes, the existing tag in
+    the OSPFv2 and OSPFv3 AS-External-LSA and NSSA-LSA encodings SHOULD be utilized for
+    the first tag. This will facilitate backward compatibility with implementations
+    that do not support this specification.
+  </t>
+  <t>
+    An OSPF router supporting this specification SHOULD propagate administrative tags
+    when acting as an Area Border Router and originating summary advertisements into other
+    areas (unless inhibited by local policy <xref target="MANAGE"/>). Similarly, an OSPF
+    router supporting this specification and acting as an ABR for a Not-So-Stubby Area (NSSA)
+    SHOULD propagate tags    when translating NSSA routes to AS External
+    advertisements <xref target="RFC3101"/> (also subject to local
+    policy <xref target="MANAGE"/>). The number of tags supported MAY limit the number
+    of tags that are propagated. When propagating multiple tags, the order of the the
+    tags SHOULD be preserved.
+  </t>
+  <t>
+    For configured area ranges, NSSA ranges, and configured summarization of redistributed
+    routes, tags from component routes SHOULD NOT be propagated to the summary. Implementations
+    SHOULD provide a mechanism to configure multiple tags for area ranges, NSSA ranges, and
+    redistributed route summaries.
+  </t>
 <section anchor="ECMP" title="Equal-Cost Multipath Applicability">
-<t>When multiple LSAs contribute to an OSPF route, it is possible that these
-LSAs will all have different tags. In this situation, the OSPF router MUST associate
-the tags from one of the LSAs contributing a path and, if the implementation supports
-multiple tags, MAY associate tags for multiple contributing LSAs up to the maximum
-number of tags supported.</t>
+  <t>
+    When multiple LSAs contribute to an OSPF route, it is possible that these
+    LSAs will all have different tags. In this situation, the OSPF router MUST associate
+    the tags from one of the LSAs contributing a path and, if the implementation supports
+    multiple tags, MAY associate tags for multiple contributing LSAs up to the maximum
+    number of tags supported.
+  </t>
 </section>
 </section>
 
+<section anchor="BGP-LS" title="BGP-LS Advertisement">
+  <t>
+    BGP-LS <xref target="RFC7752"/> introduced the support for advertising
+    administrative tags	associated with prefixes using the BGP-LS IGP Route
+    Tag TLV (TLV 1153) that is used to carry the OSPF Administrative Tags specified
+    in this document.	
+  </t>
+</section>
+<section anchor="MANAGE" title="Management Considerations">
+  <t>
+    Implementations MAY include configuration of policies to inhibit the advertisement of
+    tags on and redistributed prefixes. Implementations MAY also include configuration of
+    policies to filter the propagation of admin-tags between areas (both E-Inter-Area-Prefix-LSAs
+    and translated E-AS-External-LSAs).
+    However, the default behavior SHOULD be to advertise or propagate
+    the lesser of all the tags associated with the prefix or the maximum number of
+    tags supported by the implementation. 
+  </t>
+</section>
 <section title="YANG Data Model">
   <t>YANG <xref target="RFC7950"></xref> is a data definition language
       used to define the contents of a conceptual data store
@@ -316,7 +319,7 @@ module: ietf-ospf-admin-tags
    +--ro perfix-admin-tag-sub-tlvs
       +--ro admin-tag-sub-tlv* []
          +--ro admin-tags*   uint32
- augment /rt:routing/rt:control-plane-protocols
+vv augment /rt:routing/rt:control-plane-protocols
          /rt:control-plane-protocol/ospf:ospf/ospf:database
          /ospf:as-scope-lsa-type/ospf:as-scope-lsas/ospf:as-scope-lsa
          /ospf:version/ospf:ospfv2/ospf:ospfv2/ospf:body/ospf:opaque
@@ -340,16 +343,6 @@ module: ietf-ospf-admin-tags
          /ospf:area-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
          /ospf:body/ospfv3-e-lsa:e-intra-area-prefix
          /ospfv3-e-lsa:e-intra-prefix-tlvs
-         /ospfv3-e-lsa:intra-prefix-tlv:
-   +--ro perfix-admin-tag-sub-tlvs
-      +--ro admin-tag-sub-tlv* []
-         +--ro admin-tags*   uint32
- augment /rt:routing/rt:control-plane-protocols
-         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-         /ospf:interfaces/ospf:interface/ospf:database
-         /ospf:link-scope-lsa-type/ospf:link-scope-lsas
-         /ospf:link-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
-         /ospf:body/ospfv3-e-lsa:e-link/ospfv3-e-lsa:e-link-tlvs
          /ospfv3-e-lsa:intra-prefix-tlv:
    +--ro perfix-admin-tag-sub-tlvs
       +--ro admin-tag-sub-tlv* []
@@ -640,25 +633,6 @@ module ietf-ospf-admin-tags {
 
   augment "/rt:routing/"
     + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:areas/ospf:area/"
-    + "ospf:interfaces/ospf:interface/ospf:database/"
-    + "ospf:link-scope-lsa-type/ospf:link-scope-lsas/"
-    + "ospf:link-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-link/"
-    + "ospfv3-e-lsa:e-link-tlvs/ospfv3-e-lsa:intra-prefix-tlv" {
-    when "derived-from-or-self(../../../../../../../../../../"
-       + "../../../../rt:type, 'ospf:ospfv3')" {
-      description
-        "This augmentation is only valid for OSPFv3.";
-    }
-    description
-      "Augment OSPFv3 Intra-Area-Prefix TLV in the E-Link-LSA.";
-
-    uses prefix-admin-tag-sub-tlvs;
-  }
-
-  augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
     + "ospf:ospf/ospf:database/"
     + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
     + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
@@ -708,45 +682,54 @@ module ietf-ospf-admin-tags {
       on their application. One such application is to control leaking of OSPF
       routes to other protocols (e.g., BGP <xref target="RFC4271"/>). If an attacker
       were able to modify
-      the admin tags associated with OSPF routes and they were be used for this
+      the admin tags associated with OSPF routes and they were being used for this
       application, such routes could be prevented from being advertised in routing
       domains where they are required (subtle denial or service) or they could be
       advertised into routing domains where they shouldn't be advertised (routing
       vulnerability).
       Security considerations for the base OSPF protocol are covered
-      in <xref target="RFC2328"/> and <xref target="RFC5340"/>.</t>
+      in <xref target="RFC2328"/> and <xref target="RFC5340"/>.
+   </t>
 
-    <t>The YANG modules specified in this document define a schema for
-       data that is designed to be accessed via network
-       management protocols such as NETCONF <xref target="RFC6241"/> or
-       RESTCONF <xref target="RFC8040"/>. The lowest NETCONF layer is the secure transport
-       layer, and the mandatory-to-implement secure transport is Secure Shell (SSH)
-       <xref target="RFC6242"/>. The lowest RESTCONF layer is HTTPS, and the
-       mandatory-to-implement secure transport is TLS <xref target="RFC8446"/>.</t>
+   <t>
+     The YANG modules specified in this document define a schema for
+     data that is designed to be accessed via network
+     management protocols such as NETCONF <xref target="RFC6241"/> or
+     RESTCONF <xref target="RFC8040"/>. The lowest NETCONF layer is the secure transport
+     layer, and the mandatory-to-implement secure transport is Secure Shell (SSH)
+     <xref target="RFC6242"/>. The lowest RESTCONF layer is HTTPS, and the
+     mandatory-to-implement secure transport is TLS <xref target="RFC8446"/>.
+   </t>
 
-   <t>The NETCONF Access Control Model (NACM) <xref target="RFC8341"/> provides the
-      means to restrict access for particular NETCONF or RESTCONF users to a
-      pre-configured subset of all available NETCONF or RESTCONF protocol
-      operations and content.</t>
+   <t>
+     The NETCONF Access Control Model (NACM) <xref target="RFC8341"/> provides the
+     means to restrict access for particular NETCONF or RESTCONF users to a
+     pre-configured subset of all available NETCONF or RESTCONF protocol
+     operations and content.
+   </t>
 
-  <t>The following data nodes defined in the YANG module that are
-    writable/creatable/deletable (i.e., config true, which is the default).
-    The modifications to these data nodes without proper protection can
-    have a negative effect on network operations.</t>
-    <ul empty="true" spacing="normal">
-      <li>/ospf:ospf/ospf:areas/ospf:area/ospf:interfaces/ospf:interface/admin-tags</li>
-      <li>/ospf:ospf/ospf:areas/ospf:area/ospf:ranges/ospf:range/admin-tags</li>
-    </ul>
+   <t>
+     The following data nodes defined in the YANG module that are
+     writable/creatable/deletable (i.e., config true, which is the default).
+     The modifications to these data nodes without proper protection can
+     have a negative effect on network operations.
+   </t>
+   <ul empty="true" spacing="normal">
+     <li>/ospf:ospf/ospf:areas/ospf:area/ospf:interfaces/ospf:interface/admin-tags</li>
+     <li>/ospf:ospf/ospf:areas/ospf:area/ospf:ranges/ospf:range/admin-tags</li>
+   </ul>
 
-  <t>Some of the readable data nodes in this YANG module may be considered
-      sensitive or vulnerable in some network environments. Exposure of the
-      OSPF link state database may be useful in mounting a Denial-of-Service (DoS)
-      attacks. These are the readable data nodes:</t>
-    <ul empty="true" spacing="normal">
-      <li>/ospf:ospf/ospf:areas/ospf:area/ospf:interfaces/ospf:interface/admin-tags</li>
-      <li>/ospf:ospf/ospf:areas/ospf:area/ospf:ranges/ospf:range/admin-tags</li>
-      <li>/prefix-admin-tag-sub-tlvs</li>
-    </ul>
+   <t>
+     Some of the readable data nodes in this YANG module may be considered
+     sensitive or vulnerable in some network environments. Exposure of the
+     OSPF link state database may be useful in mounting a Denial-of-Service (DoS)
+     attacks. These are the readable data nodes:
+   </t>
+   <ul empty="true" spacing="normal">
+     <li>/ospf:ospf/ospf:areas/ospf:area/ospf:interfaces/ospf:interface/admin-tags</li>
+     <li>/ospf:ospf/ospf:areas/ospf:area/ospf:ranges/ospf:range/admin-tags</li>
+     <li>/prefix-admin-tag-sub-tlvs</li>
+   </ul>
 
 </section>
 <section title="IANA Considerations">
@@ -788,6 +771,7 @@ module ietf-ospf-admin-tags {
    <t>The authors of RFC 5130 are acknowledged since this document draws upon both the
       ISIS specification and deployment experience.</t>
    <t>Thanks to Donnie Savage for his comments and questions.</t>
+   <t>Thanks to Ketan Talaulikar for his comments and providing the BGP-LS text.</t>
    <t>The RFC text was produced using Marshall Rose's xml2rfc tool.</t>
   </section>
 </middle>
@@ -796,13 +780,13 @@ module ietf-ospf-admin-tags {
 <references title="Normative References">
       &RFC2119;
       &RFC2328;
-      &RFC3630;
       &RFC3688;
       &RFC5340;
       &RFC6020;
       &RFC6241;
       &RFC6242;
       &RFC7684;
+      &RFC7752;
       &RFC7950;
       &RFC8040;
       &RFC8174;
@@ -817,57 +801,6 @@ module ietf-ospf-admin-tags {
       &RFC3101;
       &RFC4271;
       &RFC5130;
-      &RFC8920;
 </references>
-<section anchor="UINT64-TAG" title="64-Bit Administrative Tag Sub-TLV">
-  <t>The definition of the 64-bit tag was considered but discard given that
-     there is no strong requirement or use case. The specification is
-     included here for information.</t>
-  <t>This sub-TLV will carry one or more 64-bit unsigned integer values
-that will be used as administrative tags.</t>
- <t>
-  The format of the 64-bit Administrative Tag TLV is as follows:
- </t>
-<figure title="64-bit Administrative Tag TLV">
-  <artwork>
-
-    0                   1                   2                   3
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |              Type             |             Length            |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |             First 64-bit Administrative Tag                   |
-   |                                                               |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                             O                                 |
-                                 o
-   |                             o                                 |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |             Last 64-bit Administrative Tag                    |
-   |                                                               |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-
-   Type     A 16-bit field set to TBD. The value MAY be different
-            depending upon the registry from which it is allocated.
-
-   Length   A 16-bit field that indicates the length of the value
-            portion in octets and will be a multiple of 8 octets
-            dependent on the number of administrative tags
-            advertised. If the sub-TLV is specified, at least one
-            administrative tag must be advertised.
-
-   Value    A variable length list of one or more 64-bit
-            administrative tags.
-     </artwork>
-  </figure>
-</section>
-<section title="Link Administrative Tags">
-   <t>The advertisement of administrative tags corresponding to links has
-   been removed from the document.  The specification of advertising
-   link administrative groups as specified in
-   <xref target="RFC8920"/>
-   advertising administrative tags for links.</t>
-</section>
 </back>
 </rfc>
