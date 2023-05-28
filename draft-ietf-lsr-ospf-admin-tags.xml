@@ -36,8 +36,8 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8362.xml'>
     <!ENTITY RFC8446 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml'>
-    <!ENTITY I-D.ietf-ospf-yang PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-ospf-yang-29.xml'>
+    <!ENTITY RFC9129 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9129.xml'>
     <!ENTITY I-D.ietf-ospfv3-extended-lsa-yang PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-lsr-ospfv3-extended-lsa-yang-12.xml'>
     ]>
@@ -50,7 +50,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-07"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-08"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -179,7 +179,7 @@
 
 
    Type     A 16-bit field set to TBD.
-   
+
    Length   A 16-bit field that indicates the length of the value
             portion in octets and MUST be a multiple of 4 octets
             dependent on the number of administrative tags
@@ -257,7 +257,7 @@ that will be used as administrative tags.</t>
     BGP-LS <xref target="RFC7752"/> introduced the support for advertising
     administrative tags	associated with prefixes using the BGP-LS IGP Route
     Tag TLV (TLV 1153) that is used to carry the OSPF Administrative Tags specified
-    in this document.	
+    in this document.
   </t>
 </section>
 <section anchor="MANAGE" title="Management Considerations">
@@ -268,7 +268,7 @@ that will be used as administrative tags.</t>
     and translated E-AS-External-LSAs).
     However, the default behavior SHOULD be to advertise or propagate
     the lesser of all the tags associated with the prefix or the maximum number of
-    tags supported by the implementation. 
+    tags supported by the implementation.
   </t>
 </section>
 <section title="YANG Data Model">
@@ -278,7 +278,7 @@ that will be used as administrative tags.</t>
       <xref target="RFC6241"/> or RESTCONF <xref target="RFC8040"/>.</t>
   <t>This section defines a YANG data model that can be used to configure
     and manage the prefix administrative tags defined in this document,
-    which augments the OSPF YANG data model <xref target="I-D.ietf-ospf-yang"/> and
+    which augments the OSPF YANG data model <xref target="RFC9129"/> and
     the OSPFv3 Extended LSA YANG data model
     <xref target="I-D.ietf-lsr-ospfv3-extended-lsa-yang"/>.
   </t>
@@ -793,7 +793,7 @@ module ietf-ospf-admin-tags {
       &RFC8341;
       &RFC8362;
       &RFC8446;
-      &I-D.ietf-ospf-yang;
+      &RFC9129;
       &I-D.ietf-ospfv3-extended-lsa-yang;
 </references>
 
