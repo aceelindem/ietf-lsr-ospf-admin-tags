@@ -50,14 +50,14 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-08"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-09"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
 <title abbrev="OSPF Administrative Tags">
    Extensions to OSPF for Advertising Prefix Administrative Tags</title>
   <author initials='A.' surname="Lindem" fullname='Acee Lindem' role="editor">
-    <organization>Cisco Systems</organization>
+    <organization>LabN Consulting LLC</organization>
     <address>
       <postal>
         <street>301 Midenhall Way</street>
@@ -65,7 +65,7 @@
         <country>USA</country>
         <code>27513</code>
        </postal>
-       <email>acee@cisco.com</email>
+       <email>acee.ietf@gmail.com</email>
     </address>
     </author>
 
