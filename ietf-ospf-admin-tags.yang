@@ -67,7 +67,7 @@ module ietf-ospf-admin-tags {
 
   reference "RFC XXXX";
 
-  revision 2022-10-11 {
+  revision 2022-11-20 {
     description
       "Initial revision.";
     reference
@@ -288,8 +288,8 @@ module ietf-ospf-admin-tags {
     + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-nssa/"
     + "ospfv3-e-lsa:e-external-tlvs/"
     + "ospfv3-e-lsa:external-prefix-tlv" {
-    when "derived-from-or-self(../../../../../../../../"
-       + "../../rt:type, 'ospf:ospfv3')" {
+    when "/rt:routing/rt:control-plane-protocols"
+       + "/rt:control-plane-protocol/rt:type = 'ospf:ospfv3'" {
       description
         "This augmentation is only valid for OSPFv3.";
     }
