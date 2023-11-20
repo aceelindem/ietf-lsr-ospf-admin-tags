@@ -1,4 +1,4 @@
- <?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc [
     <!ENTITY RFC2119 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'>
@@ -39,7 +39,7 @@
     <!ENTITY RFC9129 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9129.xml'>
     <!ENTITY I-D.ietf-ospfv3-extended-lsa-yang PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-lsr-ospfv3-extended-lsa-yang-13.xml'>
+      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-lsr-ospfv3-extended-lsa-yang-23.xml'>
     ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc strict="no" ?>

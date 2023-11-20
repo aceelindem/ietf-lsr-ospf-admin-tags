@@ -11,7 +11,7 @@ module ietf-ospf-admin-tags {
 
   import ietf-ospf {
     prefix ospf;
-    reference "RFC xxxx: YANG Data Model for OSPF Protocol.";
+    reference "RFC 9129: YANG Data Model for OSPF Protocol.";
   }
 
   import ietf-inet-types {
@@ -34,7 +34,7 @@ module ietf-ospf-admin-tags {
       Author:   Yingzhen Qu
                 <mailto:yingzhen.qu@futurewei.com>
       Author:   Acee Lindem
-                <mailto:acee@cisco.com>
+                <mailto:acee.ietf@gmail.com>
       Author:   Peter Psenak
                 <mailto:ppsenak@cisco.com>";
 
