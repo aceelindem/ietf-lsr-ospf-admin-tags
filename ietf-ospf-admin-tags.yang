@@ -67,7 +67,7 @@ module ietf-ospf-admin-tags {
 
   reference "RFC XXXX";
 
-  revision 2022-11-20 {
+  revision 2023-11-20 {
     description
       "Initial revision.";
     reference

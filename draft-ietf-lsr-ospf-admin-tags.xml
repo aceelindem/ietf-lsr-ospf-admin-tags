@@ -50,7 +50,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-11"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-12"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -438,7 +438,7 @@ module ietf-ospf-admin-tags {
 
   reference "RFC XXXX";
 
-  revision 2022-11-20 {
+  revision 2023-11-20 {
     description
       "Initial revision.";
     reference
