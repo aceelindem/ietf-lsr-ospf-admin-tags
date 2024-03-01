@@ -459,7 +459,8 @@ module ietf-ospf-admin-tags {
     description
       "Initial revision.";
     reference
-      "RFC XXXX: YANG Data Model for OSPF Prefix Administrative Tags.";
+      "RFC XXXX: YANG Data Model for OSPF Prefix Administrative
+       Tags.";
   }
 
   grouping prefix-admin-tag-sub-tlvs {
