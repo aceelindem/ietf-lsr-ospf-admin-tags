@@ -50,14 +50,14 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-12"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-14"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
 <title abbrev="OSPF Administrative Tags">
    Extensions to OSPF for Advertising Prefix Administrative Tags</title>
   <author initials='A.' surname="Lindem" fullname='Acee Lindem' role="editor">
-    <organization>LabN Consulting LLC</organization>
+    <organization>LabN Consulting, L.L.C.</organization>
     <address>
       <postal>
         <street>301 Midenhall Way</street>
@@ -190,8 +190,12 @@
             tags.
      </artwork>
   </figure>
-   <t>This sub-TLV will carry one or more 32-bit unsigned integer values
-that will be used as administrative tags.</t>
+  <t>
+    This sub-TLV will carry one or more 32-bit unsigned integer values
+    that will be used as administrative tags. If the length is 0 or not
+    a multiple of 4 octets, the Sub-TLV should be ignored and the reception
+    SHOULD be logged for further analysis (subject to rate-limiting).
+   </t>
 </section>
 <section anchor="APPLICABILTY" title="Administrative Tag Applicability">
   <t>
@@ -229,11 +233,23 @@ that will be used as administrative tags.</t>
     when acting as an Area Border Router and originating summary advertisements into other
     areas (unless inhibited by local policy <xref target="MANAGE"/>). Similarly, an OSPF
     router supporting this specification and acting as an ABR for a Not-So-Stubby Area (NSSA)
-    SHOULD propagate tags    when translating NSSA routes to AS External
+    SHOULD propagate tags when translating NSSA routes to AS External
     advertisements <xref target="RFC3101"/> (also subject to local
-    policy <xref target="MANAGE"/>). The number of tags supported MAY limit the number
-    of tags that are propagated. When propagating multiple tags, the order of the the
-    tags SHOULD be preserved.
+    policy <xref target="MANAGE"/>).
+  </t>
+  <t>
+    The semantics of the tag order are implementation-dependent.  That
+    is, there is no implied meaning to the ordering of the tags that
+    indicates a certain operation or set of operations need be performed
+    based on the order of the tags.  Each tag SHOULD be treated as an
+    autonomous identifier that MAY be used in policy to perform a policy
+    action.  Whether or not tag A precedes or succeeds tag B SHOULD not
+    change the meaning of the tag set.
+    The number of tags supported MAY limit the number
+    of tags that are propagated. When propagating multiple tags between areas as
+    previously described, the order of the the tags SHOULD be preserved so
+    that implementations supporting fewer tags will have a consistent view
+    across areas.
   </t>
   <t>
     For configured area ranges, NSSA ranges, and configured summarization of redistributed
@@ -246,8 +262,9 @@ that will be used as administrative tags.</t>
     When multiple LSAs contribute to an OSPF route, it is possible that these
     LSAs will all have different tags. In this situation, the OSPF router MUST associate
     the tags from one of the LSAs contributing a path and, if the implementation supports
-    multiple tags, MAY associate tags for multiple contributing LSAs up to the maximum
-    number of tags supported.
+    multiple tags, MAY associate tags from multiple contributing LSAs up to the maximum
+    number of tags supported. It is RECOMMENDED that tags from LSAs are added to the path
+    in ascending order of LSA originator Router-ID.
   </t>
 </section>
 </section>
@@ -368,48 +385,46 @@ vv augment /rt:routing/rt:control-plane-protocols
       ]]></artwork>
 
 <t>The following is the YANG module:</t>
-<sourcecode name="ietf-ospf-admin-tags@2023-11-20.yang" type="" markers="true"><![CDATA[
+<sourcecode name="ietf-ospf-admin-tags@2024-03-01.yang" type="" markers="true"><![CDATA[
 module ietf-ospf-admin-tags {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-ospf-admin-tags";
   prefix ospf-admin-tags;
 
   import ietf-routing {
-    prefix "rt";
-    reference "RFC 8349: A YANG Data Model for Routing
-               Management (NMDA Version)";
+    prefix rt;
+    reference
+      "RFC 8349: A YANG Data Model for Routing
+       Management (NMDA Version)";
   }
-
   import ietf-ospf {
     prefix ospf;
-    reference "RFC 9129: YANG Data Model for OSPF Protocol.";
+    reference
+      "RFC 9129: YANG Data Model for OSPF Protocol.";
   }
-
   import ietf-inet-types {
-    prefix "inet";
-    reference "RFC 6991: Common YANG Data Types";
+    prefix inet;
+    reference
+      "RFC 6991: Common YANG Data Types";
   }
-
   import ietf-ospfv3-extended-lsa {
-    prefix "ospfv3-e-lsa";
-    reference "RFC xxxx: YANG Model for OSPFv3 Extended LSAs.";
+    prefix ospfv3-e-lsa;
+    reference
+      "RFC xxxx: YANG Model for OSPFv3 Extended LSAs.";
   }
 
   organization
     "IETF LSR - Link State Routing Working Group";
-
   contact
-     "WG Web:   <https://datatracker.ietf.org/wg/lsr/>
-      WG List:  <mailto:lsr@ietf.org>
+    "WG Web:   <https://datatracker.ietf.org/wg/lsr/>
+     WG List:  <mailto:lsr@ietf.org>
 
-      Author:   Yingzhen Qu
-                <mailto:yingzhen.qu@futurewei.com>
-      Author:   Acee Lindem
-                <mailto:acee.ietf@gmail.com>
-      Author:   Peter Psenak
-                <mailto:ppsenak@cisco.com>";
-
-
+     Author:   Yingzhen Qu
+               <mailto:yingzhen.qu@futurewei.com>
+     Author:   Acee Lindem
+               <mailto:acee.ietf@gmail.com>
+     Author:   Peter Psenak
+               <mailto:ppsenak@cisco.com>";
   description
     "This YANG module defines the configuration
      and operational state for OSPF administrative tags.
@@ -435,10 +450,10 @@ module ietf-ospf-admin-tags {
      'MAY', and 'OPTIONAL' in this document are to be interpreted as
      described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
      they appear in all capitals, as shown here.";
+  reference
+    "RFC XXXX";
 
-  reference "RFC XXXX";
-
-  revision 2023-11-20 {
+  revision 2024-03-01 {
     description
       "Initial revision.";
     reference
@@ -446,27 +461,31 @@ module ietf-ospf-admin-tags {
   }
 
   grouping prefix-admin-tag-sub-tlvs {
-    description "Prefix Administrative Tag sub-TLVs.";
-
+    description
+      "Prefix Administrative Tag sub-TLVs.";
     container perfix-admin-tag-sub-tlvs {
       config false;
-      description "Prefix admin tag sub-TLV.";
+      description
+        "Prefix admin tag sub-TLV.";
       list admin-tag-sub-tlv {
-        description "Prefix admin tag sub-TLV.";
+        description
+          "Prefix admin tag sub-TLV.";
         leaf-list admin-tags {
           type uint32;
-          description "32-bit administrative tag.";
+          description
+            "32-bit administrative tag.";
         }
       }
     }
   }
 
   /* Configuration */
+
   augment "/rt:routing/rt:control-plane-protocols/"
         + "rt:control-plane-protocol/ospf:ospf/"
         + "ospf:areas/ospf:area/ospf:ranges/ospf:range" {
-        when "derived-from-or-self(../../../../../"
-           + "rt:type, 'ospf:ospf')" {
+    when "derived-from-or-self(../../../../../"
+       + "rt:type, 'ospf:ospf')" {
       description
         "This augments the OSPF routing protocol area range
          configuration.";
@@ -475,7 +494,6 @@ module ietf-ospf-admin-tags {
       "This augments the OSPF protocol area range configuration
        with Administrative Tags. The configured tags will be
        advertised with summary prefix when it is active.";
-
     container admin-tags {
       when "../ospf:advertise = 'true'";
       leaf-list tags {
@@ -491,8 +509,8 @@ module ietf-ospf-admin-tags {
   augment "/rt:routing/rt:control-plane-protocols/"
         + "rt:control-plane-protocol/ospf:ospf/"
         + "ospf:areas/ospf:area/ospf:interfaces/ospf:interface" {
-        when "derived-from-or-self(../../../../../"
-           + "rt:type, 'ospf:ospf')" {
+    when "derived-from-or-self(../../../../../"
+       + "rt:type, 'ospf:ospf')" {
       description
         "This augments the OSPF routing protocol interface
          configuration.";
@@ -501,7 +519,6 @@ module ietf-ospf-admin-tags {
       "This augments the OSPF protocol interface configuration
        with Administrative Tags. The configured tags will be
        advertised with local prefixes configured for the interface.";
-
     container admin-tags {
       list tags {
         key "tag";
@@ -511,17 +528,17 @@ module ietf-ospf-admin-tags {
             "32-bit administrative tag.";
         }
         list advertise-prefixes {
-           key "prefix";
-           leaf prefix {
-             type inet:ip-prefix;
-             description
-                "IPv4 or IPv6 prefix";
-           }
-           description
-             "By default, the tag advertised will be advertised
-              for all prefixes associated with the interface.
-              If advertise-prefixes is specified, the tag is
-              only applied to interfaces prefixes in the list";
+          key "prefix";
+          leaf prefix {
+            type inet:ip-prefix;
+            description
+              "IPv4 or IPv6 prefix";
+          }
+          description
+            "By default, the tag advertised will be advertised
+             for all prefixes associated with the interface.
+             If advertise-prefixes is specified, the tag is
+             only applied to interfaces prefixes in the list";
         }
         description
           "List of administrative tags that are to be advertised
@@ -535,6 +552,7 @@ module ietf-ospf-admin-tags {
   }
 
   /* Database */
+
   augment "/rt:routing/"
         + "rt:control-plane-protocols/rt:control-plane-protocol/"
         + "ospf:ospf/ospf:areas/ospf:area/"
@@ -553,7 +571,6 @@ module ietf-ospf-admin-tags {
        TLV in type 9 opaque LSA.";
     uses prefix-admin-tag-sub-tlvs;
   }
-
 
   augment "/rt:routing/"
         + "rt:control-plane-protocols/rt:control-plane-protocol/"
@@ -593,13 +610,13 @@ module ietf-ospf-admin-tags {
   }
 
   augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
-    + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
-    + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-inter-area-prefix/"
-    + "ospfv3-e-lsa:e-inter-prefix-tlvs/"
-    + "ospfv3-e-lsa:inter-prefix-tlv" {
+        + "rt:control-plane-protocols/rt:control-plane-protocol/"
+        + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
+        + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
+        + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
+        + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-inter-area-prefix/"
+        + "ospfv3-e-lsa:e-inter-prefix-tlvs/"
+        + "ospfv3-e-lsa:inter-prefix-tlv" {
     when "derived-from-or-self(../../../../../../../../../../"
        + "../../rt:type, 'ospf:ospfv3')" {
       description
@@ -608,18 +625,17 @@ module ietf-ospf-admin-tags {
     description
       "Augment OSPFv3 Inter-Area-Prefix TLV in the
        E-Inter-Area-Prefix LSA.";
-
     uses prefix-admin-tag-sub-tlvs;
   }
 
   augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
-    + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
-    + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-intra-area-prefix/"
-    + "ospfv3-e-lsa:e-intra-prefix-tlvs/"
-    + "ospfv3-e-lsa:intra-prefix-tlv" {
+        + "rt:control-plane-protocols/rt:control-plane-protocol/"
+        + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
+        + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
+        + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
+        + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-intra-area-prefix/"
+        + "ospfv3-e-lsa:e-intra-prefix-tlvs/"
+        + "ospfv3-e-lsa:intra-prefix-tlv" {
     when "/rt:routing/rt:control-plane-protocols"
        + "/rt:control-plane-protocol/rt:type = 'ospf:ospfv3'" {
       description
@@ -628,18 +644,17 @@ module ietf-ospf-admin-tags {
     description
       "Augment OSPFv3 Intra-Area-Prefix TLV in the
        E-Intra-Area-Prefix LSA.";
-
     uses prefix-admin-tag-sub-tlvs;
   }
 
   augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:database/"
-    + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
-    + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-as-external/"
-    + "ospfv3-e-lsa:e-external-tlvs/"
-    + "ospfv3-e-lsa:external-prefix-tlv" {
+        + "rt:control-plane-protocols/rt:control-plane-protocol/"
+        + "ospf:ospf/ospf:database/"
+        + "ospf:as-scope-lsa-type/ospf:as-scope-lsas/"
+        + "ospf:as-scope-lsa/ospf:version/ospf:ospfv3/"
+        + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-as-external/"
+        + "ospfv3-e-lsa:e-external-tlvs/"
+        + "ospfv3-e-lsa:external-prefix-tlv" {
     when "derived-from-or-self(../../../../../../../../"
        + "../../rt:type, 'ospf:ospfv3')" {
       description
@@ -647,18 +662,17 @@ module ietf-ospf-admin-tags {
     }
     description
       "Augment OSPFv3 External-Prefix TLV in the E-AS-External-LSA.";
-
     uses prefix-admin-tag-sub-tlvs;
   }
 
   augment "/rt:routing/"
-    + "rt:control-plane-protocols/rt:control-plane-protocol/"
-    + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
-    + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
-    + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
-    + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-nssa/"
-    + "ospfv3-e-lsa:e-external-tlvs/"
-    + "ospfv3-e-lsa:external-prefix-tlv" {
+        + "rt:control-plane-protocols/rt:control-plane-protocol/"
+        + "ospf:ospf/ospf:areas/ospf:area/ospf:database/"
+        + "ospf:area-scope-lsa-type/ospf:area-scope-lsas/"
+        + "ospf:area-scope-lsa/ospf:version/ospf:ospfv3/"
+        + "ospf:ospfv3/ospf:body/ospfv3-e-lsa:e-nssa/"
+        + "ospfv3-e-lsa:e-external-tlvs/"
+        + "ospfv3-e-lsa:external-prefix-tlv" {
     when "/rt:routing/rt:control-plane-protocols"
        + "/rt:control-plane-protocol/rt:type = 'ospf:ospfv3'" {
       description
@@ -666,7 +680,6 @@ module ietf-ospf-admin-tags {
     }
     description
       "Augment OSPFv3 External-Prefix TLV in the E-NSSA-LSA.";
-
     uses prefix-admin-tag-sub-tlvs;
   }
 }
@@ -769,12 +782,16 @@ module ietf-ospf-admin-tags {
         reference: RFC XXXX]]></artwork>
 </section>
   <section title="Acknowledgments">
-   <t>The authors of RFC 5130 are acknowledged since this document draws upon both the
-      ISIS specification and deployment experience.</t>
+   <t>
+     The authors of RFC 5130 <xref target="RFC5130"/> are acknowledged since this document
+     draws upon both the ISIS specification and deployment experience. The text in
+     <xref target="OSPF-OPERATION"/> is adopted from RFC 5130.
+    </t>
    <t>Thanks to Donnie Savage for his comments and questions.</t>
    <t>Thanks to Ketan Talaulikar for his comments and providing the BGP-LS text.</t>
-   <t>The RFC text was produced using Marshall Rose's xml2rfc tool.</t>
-  </section>
+   <t>Thanks to Tony Przygienda and Les Ginsberg for discussions on
+      tag selection.</t>
+   </section>
 </middle>
 <?rfc needLines="20"?>
 <back>
