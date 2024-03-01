@@ -12,7 +12,7 @@ module ietf-ospf-admin-tags {
   import ietf-ospf {
     prefix ospf;
     reference
-      "RFC 9129: YANG Data Model for OSPF Protocol.";
+      "RFC 9129: YANG Data Model for the OSPF Protocol.";
   }
   import ietf-inet-types {
     prefix inet;
@@ -32,7 +32,7 @@ module ietf-ospf-admin-tags {
      WG List:  <mailto:lsr@ietf.org>
 
      Author:   Yingzhen Qu
-               <mailto:yingzhen.qu@futurewei.com>
+               <mailto:yingzhen.ietf@gmail.com>
      Author:   Acee Lindem
                <mailto:acee.ietf@gmail.com>
      Author:   Peter Psenak
@@ -44,7 +44,7 @@ module ietf-ospf-admin-tags {
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
 
-     Copyright (c) 2022 IETF Trust and the persons identified as
+     Copyright (c) 2024 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -65,11 +65,11 @@ module ietf-ospf-admin-tags {
   reference
     "RFC XXXX";
 
-  revision 2024-03-01 {
+  revision 2024-01-04 {
     description
       "Initial revision.";
     reference
-      "RFC XXXX: A YANG Data Model for OSPFv2 Administrative Tags.";
+      "RFC XXXX: YANG Data Model for OSPF Prefix Administrative Tags.";
   }
 
   grouping prefix-admin-tag-sub-tlvs {
