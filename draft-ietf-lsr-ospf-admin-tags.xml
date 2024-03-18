@@ -52,7 +52,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-16"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-17"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -140,8 +140,7 @@
    OSPFv2 and OSPFv3.  OSPFv2 or OSPFv3 is used when the text is
    specific to one version of the OSPF protocol.</t>
   <t>The definition of the 64-bit tag was considered but discard given that
-     there is no strong requirement or use case. The specification is
-     included here for information.</t>
+     there is no strong requirement or use case.</t>
   <t>The ISIS protocol supports a similar mechanism that is described in RFC 5130
   <xref target="RFC5130"/>.</t>
   <section title="Requirements Language">
@@ -796,6 +795,7 @@ reference: RFC XXXX
    <t>Thanks to Ketan Talaulikar for his comments and providing the BGP-LS text.</t>
    <t>Thanks to Tony Przygienda and Les Ginsberg for discussions on
       tag selection.</t>
+   <t>Thanks to Russ White for his Routing Directorate review.</t>
    </section>
 </middle>
 <?rfc needLines="20"?>
