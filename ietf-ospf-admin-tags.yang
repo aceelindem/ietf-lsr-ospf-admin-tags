@@ -12,7 +12,7 @@ module ietf-ospf-admin-tags {
   import ietf-ospf {
     prefix ospf;
     reference
-      "RFC 9129: YANG Data Model for the OSPF Protocol.";
+      "RFC 9129: YANG Data Model for the OSPF Protocol";
   }
   import ietf-inet-types {
     prefix inet;
@@ -22,7 +22,8 @@ module ietf-ospf-admin-tags {
   import ietf-ospfv3-extended-lsa {
     prefix ospfv3-e-lsa;
     reference
-      "RFC xxxx: YANG Model for OSPFv3 Extended LSAs.";
+      "RFC xxxx: YANG Data Model for OSPFv3 Extended Link
+       State Advertisements (LSAs)";
   }
 
   organization
@@ -65,29 +66,25 @@ module ietf-ospf-admin-tags {
   reference
     "RFC XXXX";
 
-  revision 2024-01-04 {
+  revision 2024-05-29 {
     description
       "Initial revision.";
     reference
-      "RFC XXXX: YANG Data Model for OSPF Prefix Administrative
-       Tags.";
+      "RFC XXXX: Extensions to OSPF for Advertising Prefix
+                 Administrative Tags.";
   }
 
-  grouping prefix-admin-tag-sub-tlvs {
+  grouping prefix-admin-tag-sub-tlv {
     description
       "Prefix Administrative Tag sub-TLVs.";
-    container perfix-admin-tag-sub-tlvs {
+    container prefix-admin-tag-sub-tlv {
       config false;
       description
         "Prefix admin tag sub-TLV.";
-      list admin-tag-sub-tlv {
+      leaf-list admin-tag {
+        type uint32;
         description
-          "Prefix admin tag sub-TLV.";
-        leaf-list admin-tags {
-          type uint32;
-          description
-            "32-bit administrative tag.";
-        }
+          "32-bit administrative tag.";
       }
     }
   }
@@ -109,7 +106,7 @@ module ietf-ospf-admin-tags {
        advertised with summary prefix when it is active.";
     container admin-tags {
       when "../ospf:advertise = 'true'";
-      leaf-list tags {
+      leaf-list tag {
         type uint32;
         description
           "32-bit administrative tags.";
@@ -132,35 +129,36 @@ module ietf-ospf-admin-tags {
       "This augments the OSPF protocol interface configuration
        with Administrative Tags. The configured tags will be
        advertised with local prefixes configured for the interface.";
-    container admin-tags {
-      list tags {
-        key "tag";
-        leaf tag {
+    container local-prefix-admin-tags {
+      leaf-list default-admin-tag {
+        type uint32;
+        description
+          "32-bit administrative tags that will be associated with
+           local prefixes if the prefix is not specified explicitly.
+           If omitted, no admin tags are associated with local prefixes
+           by default.";
+      }
+      list specific-prefix-admin-tag {
+        key "prefix";
+        leaf prefix {
+          type inet:ip-prefix;
+          description
+            "IPv4 or IPv6 prefix";
+        }
+        leaf-list admin-tag {
           type uint32;
           description
-            "32-bit administrative tag.";
-        }
-        list advertise-prefixes {
-          key "prefix";
-          leaf prefix {
-            type inet:ip-prefix;
-            description
-              "IPv4 or IPv6 prefix";
-          }
-          description
-            "By default, the tag advertised will be advertised
-             for all prefixes associated with the interface.
-             If advertise-prefixes is specified, the tag is
-             only applied to interfaces prefixes in the list";
+            "32-bit administrative tags that will be associated with
+             the specified local prefix. If omitted, no admin tags are
+             associated with the specified local prefix.";
         }
         description
-          "List of administrative tags that are to be advertised
-           with prefixes associated with the interfaces. Optionally,
-           tag advertisement may be restricted to specific
-           prefixes.";
+          "Admin tags that are explicitly associated with
+           the specified prefix.";        
       }
       description
-        "OSPF prefix administrative tags.";
+        "List of administrative tags that are to be advertised
+         with interface local prefixes.";
     }
   }
 
@@ -182,7 +180,7 @@ module ietf-ospf-admin-tags {
     description
       "Prefix Administrative Tag Sub-TLVs for OSPFv2 extended prefix
        TLV in type 9 opaque LSA.";
-    uses prefix-admin-tag-sub-tlvs;
+    uses prefix-admin-tag-sub-tlv;
   }
 
   augment "/rt:routing/"
@@ -201,7 +199,7 @@ module ietf-ospf-admin-tags {
     description
       "Prefix Administrative Tag Sub-TLVs for OSPFv2 extended prefix
        TLV in type 10 opaque LSA.";
-    uses prefix-admin-tag-sub-tlvs;
+    uses prefix-admin-tag-sub-tlv;
   }
 
   augment "/rt:routing/"
@@ -219,7 +217,7 @@ module ietf-ospf-admin-tags {
     description
       "Prefix Administrative Tag Sub-TLVs for OSPFv2 extended prefix
        TLV in type 11 opaque LSA.";
-    uses prefix-admin-tag-sub-tlvs;
+    uses prefix-admin-tag-sub-tlv;
   }
 
   augment "/rt:routing/"
@@ -238,7 +236,7 @@ module ietf-ospf-admin-tags {
     description
       "Augment OSPFv3 Inter-Area-Prefix TLV in the
        E-Inter-Area-Prefix LSA.";
-    uses prefix-admin-tag-sub-tlvs;
+    uses prefix-admin-tag-sub-tlv;
   }
 
   augment "/rt:routing/"
@@ -257,7 +255,7 @@ module ietf-ospf-admin-tags {
     description
       "Augment OSPFv3 Intra-Area-Prefix TLV in the
        E-Intra-Area-Prefix LSA.";
-    uses prefix-admin-tag-sub-tlvs;
+    uses prefix-admin-tag-sub-tlv;
   }
 
   augment "/rt:routing/"
@@ -275,7 +273,7 @@ module ietf-ospf-admin-tags {
     }
     description
       "Augment OSPFv3 External-Prefix TLV in the E-AS-External-LSA.";
-    uses prefix-admin-tag-sub-tlvs;
+    uses prefix-admin-tag-sub-tlv;
   }
 
   augment "/rt:routing/"
@@ -293,6 +291,6 @@ module ietf-ospf-admin-tags {
     }
     description
       "Augment OSPFv3 External-Prefix TLV in the E-NSSA-LSA.";
-    uses prefix-admin-tag-sub-tlvs;
+    uses prefix-admin-tag-sub-tlv;
   }
 }
