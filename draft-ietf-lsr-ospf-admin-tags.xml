@@ -54,7 +54,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-18"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-19"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -729,7 +729,7 @@ module ietf-ospf-admin-tags {
      have a negative effect on network operations.
    </t>
    <ul empty="true" spacing="normal">
-     <li>/ospf:ospf/ospf:areas/ospf:area/ospf:interfaces/ospf:interface/admin-tags</li>
+     <li>/ospf:ospf/ospf:areas/ospf:area/ospf:interfaces/ospf:interface/local-prefix-admin-tags</li>
      <li>/ospf:ospf/ospf:areas/ospf:area/ospf:ranges/ospf:range/admin-tags</li>
    </ul>
 
@@ -740,9 +740,9 @@ module ietf-ospf-admin-tags {
      attacks. These are the readable data nodes:
    </t>
    <ul empty="true" spacing="normal">
-     <li>/ospf:ospf/ospf:areas/ospf:area/ospf:interfaces/ospf:interface/admin-tags</li>
+     <li>/ospf:ospf/ospf:areas/ospf:area/ospf:interfaces/ospf:interface/local-prefix-admin-tags</li>
      <li>/ospf:ospf/ospf:areas/ospf:area/ospf:ranges/ospf:range/admin-tags</li>
-     <li>/prefix-admin-tag-sub-tlvs</li>
+     <li>/prefix-admin-tag-sub-tlv</li>
    </ul>
 
 </section>
