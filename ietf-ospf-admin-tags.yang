@@ -66,7 +66,7 @@ module ietf-ospf-admin-tags {
   reference
     "RFC XXXX";
 
-  revision 2024-05-29 {
+  revision 2024-06-29 {
     description
       "Initial revision.";
     reference
@@ -102,11 +102,11 @@ module ietf-ospf-admin-tags {
     }
     description
       "This augments the OSPF protocol area range configuration
-       with Administrative Tags. The configured tags will be
+       with administrative tags. The configured tags will be
        advertised with summary prefix when it is active.";
     container admin-tags {
       when "../ospf:advertise = 'true'";
-      leaf-list tag {
+      leaf-list admin-tag {
         type uint32;
         description
           "32-bit administrative tags.";
@@ -115,6 +115,25 @@ module ietf-ospf-admin-tags {
         "OSPF prefix administrative tags.";
     }
   }
+
+  augment "/rt:routing/rt:control-plane-protocols/"
+        + "rt:control-plane-protocol/ospf:ospf/"
+        + "ospf:areas/ospf:area/ospf:ranges/ospf:range" {
+    when "derived-from-or-self(../../../../../"
+       + "rt:type, 'ospf:ospf')" {
+      description
+        "This augments the OSPF routing protocol area range
+         configuration.";
+    }
+    description
+      "This augment summary route configuration with
+       administrative tags.";
+      leaf-list admin-tag {
+        type uint32;
+        description
+          "32-bit administrative tags.";
+      }       
+  }  
 
   augment "/rt:routing/rt:control-plane-protocols/"
         + "rt:control-plane-protocol/ospf:ospf/"
@@ -160,6 +179,20 @@ module ietf-ospf-admin-tags {
         "List of administrative tags that are to be advertised
          with interface local prefixes.";
     }
+  }
+
+  /* Local-RIB */
+  augment "/rt:routing/"
+        + "rt:control-plane-protocols/rt:control-plane-protocol/"
+        + "ospf:ospf/ospf:local-rib/ospf:route/ospf:next-hops/"
+        + "ospf:next-hop" {
+    description
+      "Augment local-rib next-hop with administrative tags.";
+      leaf-list admin-tag {
+        type uint32;
+        description
+          "32-bit administrative tags.";
+      }
   }
 
   /* Database */
