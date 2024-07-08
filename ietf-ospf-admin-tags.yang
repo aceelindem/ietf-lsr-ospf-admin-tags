@@ -22,8 +22,8 @@ module ietf-ospf-admin-tags {
   import ietf-ospfv3-extended-lsa {
     prefix ospfv3-e-lsa;
     reference
-      "RFC xxxx: YANG Data Model for OSPFv3 Extended Link
-       State Advertisements (LSAs)";
+      "RFC 9587: YANG Data Model for OSPFv3 Extended Link
+                 State Advertisements (LSAs)";
   }
 
   organization
@@ -66,7 +66,7 @@ module ietf-ospf-admin-tags {
   reference
     "RFC XXXX";
 
-  revision 2024-06-29 {
+  revision 2024-07-07 {
     description
       "Initial revision.";
     reference

@@ -42,8 +42,8 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9129.xml'>
     <!ENTITY RFC9552 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9552.xml'>
-    <!ENTITY I-D.ietf-ospfv3-extended-lsa-yang PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml-ids/reference.I-D.draft-ietf-lsr-ospfv3-extended-lsa-yang-29.xml'>
+    <!ENTITY RFC9587 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9587.xml'>
     ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc strict="no" ?>
@@ -54,7 +54,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-19"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-20"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -301,7 +301,7 @@
     and manage the prefix administrative tags defined in this document,
     which augments the OSPF YANG data model <xref target="RFC9129"/> and
     the OSPFv3 Extended LSA YANG data model
-    <xref target="I-D.ietf-lsr-ospfv3-extended-lsa-yang"/>.
+    <xref target="RFC9587"/>.
   </t>
 
   <section title="Tree for the YANG Data Model">
@@ -314,7 +314,11 @@ module: ietf-ospf-admin-tags
           /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
           /ospf:ranges/ospf:range:
     +--rw admin-tags
-       +--rw tag*   uint32
+       +--rw admin-tag*   uint32
+  augment /rt:routing/rt:control-plane-protocols
+          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+          /ospf:ranges/ospf:range:
+    +--rw admin-tag*   uint32
   augment /rt:routing/rt:control-plane-protocols
           /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
           /ospf:interfaces/ospf:interface:
@@ -323,6 +327,10 @@ module: ietf-ospf-admin-tags
        +--rw specific-prefix-admin-tag* [prefix]
           +--rw prefix       inet:ip-prefix
           +--rw admin-tag*   uint32
+  augment /rt:routing/rt:control-plane-protocols
+          /rt:control-plane-protocol/ospf:ospf/ospf:local-rib
+          /ospf:route/ospf:next-hops/ospf:next-hop:
+    +--ro admin-tag*   uint32
   augment /rt:routing/rt:control-plane-protocols
           /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
           /ospf:interfaces/ospf:interface/ospf:database
@@ -385,7 +393,7 @@ module: ietf-ospf-admin-tags
 </section>
 <section title="YANG Data Model for OSPF Prefix Administrative Tags">
 <t>The following is the YANG module:</t>
-<sourcecode name="ietf-ospf-admin-tags@2024-05-29.yang" type="" markers="true"><![CDATA[
+<sourcecode name="ietf-ospf-admin-tags@2024-07-07.yang" type="" markers="true"><![CDATA[
 module ietf-ospf-admin-tags {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-ospf-admin-tags";
@@ -410,8 +418,8 @@ module ietf-ospf-admin-tags {
   import ietf-ospfv3-extended-lsa {
     prefix ospfv3-e-lsa;
     reference
-      "RFC xxxx: YANG Data Model for OSPFv3 Extended Link
-       State Advertisements (LSAs)";
+      "RFC 9587: YANG Data Model for OSPFv3 Extended Link
+                 State Advertisements (LSAs)";
   }
 
   organization
@@ -454,7 +462,7 @@ module ietf-ospf-admin-tags {
   reference
     "RFC XXXX";
 
-  revision 2024-05-29 {
+  revision 2024-07-07 {
     description
       "Initial revision.";
     reference
@@ -490,11 +498,11 @@ module ietf-ospf-admin-tags {
     }
     description
       "This augments the OSPF protocol area range configuration
-       with Administrative Tags. The configured tags will be
+       with administrative tags. The configured tags will be
        advertised with summary prefix when it is active.";
     container admin-tags {
       when "../ospf:advertise = 'true'";
-      leaf-list tag {
+      leaf-list admin-tag {
         type uint32;
         description
           "32-bit administrative tags.";
@@ -503,6 +511,25 @@ module ietf-ospf-admin-tags {
         "OSPF prefix administrative tags.";
     }
   }
+
+  augment "/rt:routing/rt:control-plane-protocols/"
+        + "rt:control-plane-protocol/ospf:ospf/"
+        + "ospf:areas/ospf:area/ospf:ranges/ospf:range" {
+    when "derived-from-or-self(../../../../../"
+       + "rt:type, 'ospf:ospf')" {
+      description
+        "This augments the OSPF routing protocol area range
+         configuration.";
+    }
+    description
+      "This augment summary route configuration with
+       administrative tags.";
+      leaf-list admin-tag {
+        type uint32;
+        description
+          "32-bit administrative tags.";
+      }       
+  }  
 
   augment "/rt:routing/rt:control-plane-protocols/"
         + "rt:control-plane-protocol/ospf:ospf/"
@@ -548,6 +575,20 @@ module ietf-ospf-admin-tags {
         "List of administrative tags that are to be advertised
          with interface local prefixes.";
     }
+  }
+
+  /* Local-RIB */
+  augment "/rt:routing/"
+        + "rt:control-plane-protocols/rt:control-plane-protocol/"
+        + "ospf:ospf/ospf:local-rib/ospf:route/ospf:next-hops/"
+        + "ospf:next-hop" {
+    description
+      "Augment local-rib next-hop with administrative tags.";
+      leaf-list admin-tag {
+        type uint32;
+        description
+          "32-bit administrative tags.";
+      }
   }
 
   /* Database */
@@ -814,7 +855,7 @@ reference: RFC XXXX
       &RFC8446;
       &RFC9129;
       &RFC9552;
-      &I-D.ietf-ospfv3-extended-lsa-yang;
+      &RFC9587;
 </references>
 
 <references title="Informative References">
