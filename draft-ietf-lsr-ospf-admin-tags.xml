@@ -54,7 +54,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-20"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-21"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -115,7 +115,6 @@
    tags can be used for many applications including route redistribution policy, selective
    prefix prioritization, selective IP Fast-ReRoute (IPFRR) prefix protection, and many
    others.</t>
-   <t>The ISIS protocol supports a similar mechanism that is described in RFC 5130.</t>
   </abstract>
 </front>
 
@@ -143,7 +142,7 @@
    specific to one version of the OSPF protocol.</t>
   <t>The definition of the 64-bit tag was considered but discard given that
      there is no strong requirement or use case.</t>
-  <t>The ISIS protocol supports a similar mechanism that is described in RFC 5130
+  <t>The IS-IS protocol supports a similar mechanism that is described in RFC 5130
   <xref target="RFC5130"/>.</t>
   <section title="Requirements Language">
   <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
@@ -186,7 +185,7 @@
    Length   A 16-bit field that indicates the length of the value
             portion in octets and MUST be a multiple of 4 octets
             dependent on the number of administrative tags
-            advertised. At least one administrative tag must be
+            advertised. At least one administrative tag MUST be
             advertised.
 
    Value    A variable length list of one or more administrative
@@ -223,13 +222,15 @@
   at least one 32-bit tag for all type of prefixes. An OSPF router supporting this
   specification MAY be able to advertise and propagate multiple 32-bit tags. The
   maximum tags that an implementation supports is a local matter depending upon supported
-  applications using prefix tags.
+  applications using prefix tags.  Depending on the application, the number of tags supported
+  by the OSPF routers in the OSPF routing domain MAY limit deployment of that application.
   </t>
   <t>
     When tags are advertised for AS External or NSSA LSA prefixes, the existing tag in
-    the OSPFv2 and OSPFv3 AS-External-LSA and NSSA-LSA encodings SHOULD be utilized for
-    the first tag. This will facilitate backward compatibility with implementations
-    that do not support this specification.
+    the OSPFv2 and OSPFv3 AS-External-LSA and NSSA-LSA encodings MUST be utilized for
+    the first tag. Additional tags MAY be advertised using the 32-bit Administrarive Tag
+    Sub-TLV speficied in this document. This will facilitate backward compatibility with
+    implementations that do not support this specification.
   </t>
   <t>
     An OSPF router supporting this specification SHOULD propagate administrative tags
@@ -241,8 +242,7 @@
     policy <xref target="MANAGE"/>).
   </t>
   <t>
-    The semantics of the tag order are implementation-dependent.  That
-    is, there is no implied meaning to the ordering of the tags that
+    There is no implied meaning to the ordering of the tags that
     indicates a certain operation or set of operations need be performed
     based on the order of the tags.  Each tag SHOULD be treated as an
     autonomous identifier that MAY be used in policy to perform a policy
@@ -250,7 +250,7 @@
     change the meaning of the tag set.
     The number of tags supported MAY limit the number
     of tags that are propagated. When propagating multiple tags between areas as
-    previously described, the order of the the tags SHOULD be preserved so
+    previously described, the order of the the tags MUST be preserved so
     that implementations supporting fewer tags will have a consistent view
     across areas.
   </t>
@@ -276,20 +276,25 @@
   <t>
     BGP-LS <xref target="RFC9552"/> introduced the support for advertising
     administrative tags	associated with prefixes using the BGP-LS IGP Route
-    Tag TLV (TLV 1153) that is used to carry the OSPF Administrative Tags specified
-    in this document.
+    Tag TLV (TLV 1153). This BGP-LS TLV is used to advertise the OSPF
+    Administrative Tags specified in this document.
   </t>
 </section>
 <section anchor="MANAGE" title="Management Considerations">
   <t>
     Implementations MAY include configuration of policies to inhibit the advertisement of
-    tags on and redistributed prefixes. Implementations MAY also include configuration of
+    tags for redistributed prefixes. Implementations MAY also include configuration of
     policies to filter the propagation of admin-tags between areas
     (OSPFv2 Extended Prefix LSAs,  OSPFv3 E-Inter-Area-Prefix-LSAs, and
     translated OSPFv3 E-AS-External-LSAs).
     However, the default behavior SHOULD be to advertise or propagate
     the lesser number of all the tags associated with the prefix or the maximum number of
     tags supported by the implementation.
+  </t>
+  <t>
+    Both the support of this specification and the number of tags supported
+    by OSPF routers within an OSPF routing domain will limit the usefulness and
+    deployment of applications utilizing tags.
   </t>
 </section>
 <section title="YANG Data Model">
@@ -310,86 +315,86 @@
 <artwork align="left" name="" type="" alt=""><![CDATA[
 module: ietf-ospf-admin-tags
 
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:ranges/ospf:range:
-    +--rw admin-tags
-       +--rw admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:ranges/ospf:range:
-    +--rw admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:interfaces/ospf:interface:
-    +--rw local-prefix-admin-tags
-       +--rw default-admin-tag*           uint32
-       +--rw specific-prefix-admin-tag* [prefix]
-          +--rw prefix       inet:ip-prefix
-          +--rw admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:local-rib
-          /ospf:route/ospf:next-hops/ospf:next-hop:
-    +--ro admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:interfaces/ospf:interface/ospf:database
-          /ospf:link-scope-lsa-type/ospf:link-scope-lsas
-          /ospf:link-scope-lsa/ospf:version/ospf:ospfv2/ospf:ospfv2
-          /ospf:body/ospf:opaque/ospf:extended-prefix-opaque
-          /ospf:extended-prefix-tlv:
-    +--ro prefix-admin-tag-sub-tlv
-       +--ro admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:database/ospf:area-scope-lsa-type/ospf:area-scope-lsas
-          /ospf:area-scope-lsa/ospf:version/ospf:ospfv2/ospf:ospfv2
-          /ospf:body/ospf:opaque/ospf:extended-prefix-opaque
-          /ospf:extended-prefix-tlv:
-    +--ro prefix-admin-tag-sub-tlv
-       +--ro admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:database
-          /ospf:as-scope-lsa-type/ospf:as-scope-lsas/ospf:as-scope-lsa
-          /ospf:version/ospf:ospfv2/ospf:ospfv2/ospf:body/ospf:opaque
-          /ospf:extended-prefix-opaque/ospf:extended-prefix-tlv:
-    +--ro prefix-admin-tag-sub-tlv
-       +--ro admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:database/ospf:area-scope-lsa-type/ospf:area-scope-lsas
-          /ospf:area-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
-          /ospf:body/ospfv3-e-lsa:e-inter-area-prefix
-          /ospfv3-e-lsa:e-inter-prefix-tlvs
-          /ospfv3-e-lsa:inter-prefix-tlv:
-    +--ro prefix-admin-tag-sub-tlv
-       +--ro admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:database/ospf:area-scope-lsa-type/ospf:area-scope-lsas
-          /ospf:area-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
-          /ospf:body/ospfv3-e-lsa:e-intra-area-prefix
-          /ospfv3-e-lsa:e-intra-prefix-tlvs
-          /ospfv3-e-lsa:intra-prefix-tlv:
-    +--ro prefix-admin-tag-sub-tlv
-       +--ro admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:database
-          /ospf:as-scope-lsa-type/ospf:as-scope-lsas/ospf:as-scope-lsa
-          /ospf:version/ospf:ospfv3/ospf:ospfv3/ospf:body
-          /ospfv3-e-lsa:e-as-external/ospfv3-e-lsa:e-external-tlvs
-          /ospfv3-e-lsa:external-prefix-tlv:
-    +--ro prefix-admin-tag-sub-tlv
-       +--ro admin-tag*   uint32
-  augment /rt:routing/rt:control-plane-protocols
-          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-          /ospf:database/ospf:area-scope-lsa-type/ospf:area-scope-lsas
-          /ospf:area-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
-          /ospf:body/ospfv3-e-lsa:e-nssa/ospfv3-e-lsa:e-external-tlvs
-          /ospfv3-e-lsa:external-prefix-tlv:
-    +--ro prefix-admin-tag-sub-tlv
-       +--ro admin-tag*   uint32
-      ]]></artwork>
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+         /ospf:ranges/ospf:range:
+   +--rw admin-tags
+      +--rw admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+         /ospf:ranges/ospf:range:
+   +--rw admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+         /ospf:interfaces/ospf:interface:
+   +--rw local-prefix-admin-tags
+      +--rw default-admin-tag*           uint32
+      +--rw specific-prefix-admin-tag* [prefix]
+         +--rw prefix       inet:ip-prefix
+         +--rw admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:local-rib
+         /ospf:route/ospf:next-hops/ospf:next-hop:
+   +--ro admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+         /ospf:interfaces/ospf:interface/ospf:database
+         /ospf:link-scope-lsa-type/ospf:link-scope-lsas
+         /ospf:link-scope-lsa/ospf:version/ospf:ospfv2/ospf:ospfv2
+         /ospf:body/ospf:opaque/ospf:extended-prefix-opaque
+         /ospf:extended-prefix-tlv:
+   +--ro prefix-admin-tag-sub-tlv
+      +--ro admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+         /ospf:database/ospf:area-scope-lsa-type/ospf:area-scope-lsas
+         /ospf:area-scope-lsa/ospf:version/ospf:ospfv2/ospf:ospfv2
+         /ospf:body/ospf:opaque/ospf:extended-prefix-opaque
+         /ospf:extended-prefix-tlv:
+   +--ro prefix-admin-tag-sub-tlv
+      +--ro admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:database
+         /ospf:as-scope-lsa-type/ospf:as-scope-lsas/ospf:as-scope-lsa
+         /ospf:version/ospf:ospfv2/ospf:ospfv2/ospf:body/ospf:opaque
+         /ospf:extended-prefix-opaque/ospf:extended-prefix-tlv:
+   +--ro prefix-admin-tag-sub-tlv
+      +--ro admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+         /ospf:database/ospf:area-scope-lsa-type/ospf:area-scope-lsas
+         /ospf:area-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
+         /ospf:body/ospfv3-e-lsa:e-inter-area-prefix
+         /ospfv3-e-lsa:e-inter-prefix-tlvs
+         /ospfv3-e-lsa:inter-prefix-tlv:
+   +--ro prefix-admin-tag-sub-tlv
+      +--ro admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+         /ospf:database/ospf:area-scope-lsa-type/ospf:area-scope-lsas
+         /ospf:area-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
+         /ospf:body/ospfv3-e-lsa:e-intra-area-prefix
+         /ospfv3-e-lsa:e-intra-prefix-tlvs
+         /ospfv3-e-lsa:intra-prefix-tlv:
+   +--ro prefix-admin-tag-sub-tlv
+      +--ro admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:database
+         /ospf:as-scope-lsa-type/ospf:as-scope-lsas/ospf:as-scope-lsa
+         /ospf:version/ospf:ospfv3/ospf:ospfv3/ospf:body
+         /ospfv3-e-lsa:e-as-external/ospfv3-e-lsa:e-external-tlvs
+         /ospfv3-e-lsa:external-prefix-tlv:
+   +--ro prefix-admin-tag-sub-tlv
+      +--ro admin-tag*   uint32
+ augment /rt:routing/rt:control-plane-protocols
+         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
+         /ospf:database/ospf:area-scope-lsa-type/ospf:area-scope-lsas
+         /ospf:area-scope-lsa/ospf:version/ospf:ospfv3/ospf:ospfv3
+         /ospf:body/ospfv3-e-lsa:e-nssa/ospfv3-e-lsa:e-external-tlvs
+         /ospfv3-e-lsa:external-prefix-tlv:
+   +--ro prefix-admin-tag-sub-tlv
+      +--ro admin-tag*   uint32
+    ]]></artwork>
 </section>
 <section title="YANG Data Model for OSPF Prefix Administrative Tags">
 <t>The following is the YANG module:</t>
@@ -528,8 +533,8 @@ module ietf-ospf-admin-tags {
         type uint32;
         description
           "32-bit administrative tags.";
-      }       
-  }  
+      }
+  }
 
   augment "/rt:routing/rt:control-plane-protocols/"
         + "rt:control-plane-protocol/ospf:ospf/"
@@ -550,8 +555,8 @@ module ietf-ospf-admin-tags {
         description
           "32-bit administrative tags that will be associated with
            local prefixes if the prefix is not specified explicitly.
-           If omitted, no admin tags are associated with local prefixes
-           by default.";
+           If omitted, no admin tags are associated with local
+           prefixes by default.";
       }
       list specific-prefix-admin-tag {
         key "prefix";
@@ -564,12 +569,12 @@ module ietf-ospf-admin-tags {
           type uint32;
           description
             "32-bit administrative tags that will be associated with
-             the specified local prefix. If omitted, no admin tags are
-             associated with the specified local prefix.";
+             the specified local prefix. If omitted, no admin tags
+             are associated with the specified local prefix.";
         }
         description
           "Admin tags that are explicitly associated with
-           the specified prefix.";        
+           the specified prefix.";
       }
       description
         "List of administrative tags that are to be advertised
@@ -723,6 +728,7 @@ module ietf-ospf-admin-tags {
     uses prefix-admin-tag-sub-tlv;
   }
 }
+
 ]]></sourcecode>
 </section>
 </section>
@@ -745,7 +751,6 @@ module ietf-ospf-admin-tags {
       Security considerations for the base OSPF protocol are covered
       in <xref target="RFC2328"/> and <xref target="RFC5340"/>.
    </t>
-
    <t>
      The YANG modules specified in this document define a schema for
      data that is designed to be accessed via network
@@ -826,7 +831,7 @@ reference: RFC XXXX
   <section title="Acknowledgments">
    <t>
      The authors of RFC 5130 <xref target="RFC5130"/> are acknowledged since this document
-     draws upon both the ISIS specification and deployment experience. The text in
+     draws upon both the IS-IS specification and deployment experience. The text in
      <xref target="OSPF-OPERATION"/> is adopted from RFC 5130.
     </t>
    <t>Thanks to Donnie Savage for his comments and questions.</t>
@@ -834,6 +839,7 @@ reference: RFC XXXX
    <t>Thanks to Tony Przygienda and Les Ginsberg for discussions on
       tag selection.</t>
    <t>Thanks to Russ White for his Routing Directorate review.</t>
+   <t>Thanks to Bruno Decraene and Changwang Lin working group last call comments.</t>
    </section>
 </middle>
 <?rfc needLines="20"?>

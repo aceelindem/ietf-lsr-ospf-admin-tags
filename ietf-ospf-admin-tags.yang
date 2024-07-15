@@ -132,8 +132,8 @@ module ietf-ospf-admin-tags {
         type uint32;
         description
           "32-bit administrative tags.";
-      }       
-  }  
+      }
+  }
 
   augment "/rt:routing/rt:control-plane-protocols/"
         + "rt:control-plane-protocol/ospf:ospf/"
@@ -154,8 +154,8 @@ module ietf-ospf-admin-tags {
         description
           "32-bit administrative tags that will be associated with
            local prefixes if the prefix is not specified explicitly.
-           If omitted, no admin tags are associated with local prefixes
-           by default.";
+           If omitted, no admin tags are associated with local
+           prefixes by default.";
       }
       list specific-prefix-admin-tag {
         key "prefix";
@@ -168,12 +168,12 @@ module ietf-ospf-admin-tags {
           type uint32;
           description
             "32-bit administrative tags that will be associated with
-             the specified local prefix. If omitted, no admin tags are
-             associated with the specified local prefix.";
+             the specified local prefix. If omitted, no admin tags
+             are associated with the specified local prefix.";
         }
         description
           "Admin tags that are explicitly associated with
-           the specified prefix.";        
+           the specified prefix.";
       }
       description
         "List of administrative tags that are to be advertised
