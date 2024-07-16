@@ -66,7 +66,7 @@ module ietf-ospf-admin-tags {
   reference
     "RFC XXXX";
 
-  revision 2024-07-07 {
+  revision 2024-07-21 {
     description
       "Initial revision.";
     reference
@@ -84,7 +84,7 @@ module ietf-ospf-admin-tags {
       leaf-list admin-tag {
         type uint32;
         description
-          "32-bit administrative tag.";
+          "Administrative tags.";
       }
     }
   }
@@ -109,7 +109,7 @@ module ietf-ospf-admin-tags {
       leaf-list admin-tag {
         type uint32;
         description
-          "32-bit administrative tags.";
+          "Administrative tags.";
       }
       description
         "OSPF prefix administrative tags.";
@@ -126,12 +126,12 @@ module ietf-ospf-admin-tags {
          configuration.";
     }
     description
-      "This augment summary route configuration with
+      "This augments summary route configuration with
        administrative tags.";
       leaf-list admin-tag {
         type uint32;
         description
-          "32-bit administrative tags.";
+          "Administrative tags.";
       }
   }
 
@@ -152,7 +152,7 @@ module ietf-ospf-admin-tags {
       leaf-list default-admin-tag {
         type uint32;
         description
-          "32-bit administrative tags that will be associated with
+          "Administrative tags that will be associated with
            local prefixes if the prefix is not specified explicitly.
            If omitted, no admin tags are associated with local
            prefixes by default.";
@@ -167,7 +167,7 @@ module ietf-ospf-admin-tags {
         leaf-list admin-tag {
           type uint32;
           description
-            "32-bit administrative tags that will be associated with
+            "Administrative tags that will be associated with
              the specified local prefix. If omitted, no admin tags
              are associated with the specified local prefix.";
         }
@@ -187,11 +187,11 @@ module ietf-ospf-admin-tags {
         + "ospf:ospf/ospf:local-rib/ospf:route/ospf:next-hops/"
         + "ospf:next-hop" {
     description
-      "Augment local-rib next-hop with administrative tags.";
+      "This augments local-rib next-hop with administrative tags.";
       leaf-list admin-tag {
         type uint32;
         description
-          "32-bit administrative tags.";
+          "Administrative tags.";
       }
   }
 
