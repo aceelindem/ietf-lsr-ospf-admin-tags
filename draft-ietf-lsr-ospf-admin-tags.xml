@@ -56,7 +56,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-21"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-22"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -237,8 +237,8 @@
   <t>
     When tags are advertised for AS External or NSSA LSA prefixes, the existing tag in
     the OSPFv2 and OSPFv3 AS-External-LSA and NSSA-LSA encodings MUST be utilized for
-    the first tag. Additional tags MAY be advertised using the Administrarive Tag
-    Sub-TLV speficied in this document. This will facilitate backward compatibility with
+    the first tag. Additional tags MAY be advertised using the Administrative Tag
+    Sub-TLV speficified in this document. This will facilitate backward compatibility with
     implementations that do not support this specification.
   </t>
   <t>
@@ -255,11 +255,11 @@
     indicates a certain operation or set of operations need be performed
     based on the order of the tags.  Each tag SHOULD be treated as an
     autonomous identifier that MAY be used in policy to perform a policy
-    action.  Whether or not tag A precedes or succeeds tag B SHOULD not
+    action.  Whether or not tag A precedes or succeeds tag B SHOULD NOT
     change the meaning of the tag set.
     The number of tags supported MAY limit the number
     of tags that are propagated. When propagating multiple tags between areas as
-    previously described, the order of the the tags MUST be preserved so
+    previously described, the order of the tags MUST be preserved so
     that implementations supporting fewer tags will have a consistent view
     across areas.
   </t>
