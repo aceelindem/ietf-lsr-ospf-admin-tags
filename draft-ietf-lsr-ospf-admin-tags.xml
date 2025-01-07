@@ -56,7 +56,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-23"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-24"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -811,21 +811,25 @@ module ietf-ospf-admin-tags {
     TLV Sub-TLV" Registry <xref target="RFC7684"/>:
   </t>
   <ul spacing="normal">
-    <li>TBD1 - Administrative Tag Sub-TLV</li>
+    <li>TBD1 - Administrative Tag</li>
   </ul>
   <t>
     The following values should be allocated from the "OSPFv3 Extended-LSA
     Sub-TLV" Registry <xref target="RFC8362"/>:
   </t>
   <ul spacing="normal">
-    <li>TBD2 - Administrative Tag Sub-TLV</li>
+    <li>
+      TBD2 - Administrative Tag. 
+        Since this sub-TLV only applies to prefixes and not links, the value of the
+        Layer-2 Bundle Member (L2BM) field will be "X".
+    </li>
   </ul>
   <t>
     The following values should be allocated from the "OSPFv3 SRv6 Locator LSA
     Sub-TLVs" Registry <xref target="RFC9513"/>:
   </t>
   <ul spacing="normal">
-    <li>TBD3 - Administrative Tag Sub-TLV</li>
+    <li>TBD3 - Administrative Tag</li>
   </ul>
 
   <t>The IANA is requested to assign one new URI from the IETF XML
@@ -861,6 +865,7 @@ reference: RFC XXXX
    <t>Thanks to Russ White for his Routing Directorate review.</t>
    <t>Thanks to Bruno Decraene and Changwang Lin for working group last call comments.</t>
    <t>Thanks to Gunter van de Velde for has AD review and commments.</t>
+   <t>Thanks to David Dong for IANA review and commments.</t>
    </section>
 </middle>
 <?rfc needLines="20"?>
