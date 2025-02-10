@@ -56,7 +56,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-24"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-25"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -110,10 +110,10 @@
   <abstract>
    <t>It is useful for routers in OSPFv2 and OSPFv3 routing domains to be able to
    associate tags with prefixes.
-   Previously, OSPFv2 and OSPFv3 were relegated to a single tag and only for AS External
-   and Not-So-Stubby-Area (NSSA) prefixes.
+   Previously, OSPFv2 and OSPFv3 were relegated to a single tag and only for Autonomous
+   System (AS) External and Not-So-Stubby-Area (NSSA) prefixes.
    With the flexible encodings provided by OSPFv2 Prefix/Link Attribute Advertisement
-   and OSPFv3 Extended LSAs, multiple administrative
+   and OSPFv3 Extended Link State Advertisements (LSAs), multiple administrative
    tags may be advertised for all types of prefixes. These administrative
    tags can be used for many applications including route redistribution policy, selective
    prefix prioritization, selective IP Fast-ReRoute (IPFRR) prefix protection, and many
@@ -126,10 +126,10 @@
   <t>
     It is useful for routers in OSPFv2 <xref target="RFC2328"/>
     and OSPFv3 <xref target="RFC5340"/> routing domains to be able to associate tags with prefixes.
-    Previously, OSPFv2 and OSPFv3 were relegated to a single tag and only for AS External and
-    Not-So-Stubby-Area (NSSA) prefixes.
+    Previously, OSPFv2 and OSPFv3 were relegated to a single tag and only for Autonomous System (AS)
+    External and Not-So-Stubby-Area (NSSA) prefixes.
     With the flexible encodings provided by OSPFv2 Prefix/Link Attribute Advertisement
-    (<xref target="RFC7684"/>) and OSPFv3 Extended LSA (<xref target="RFC8362"/>),
+    (<xref target="RFC7684"/>) and OSPFv3 Extended Link State Advertisement (LSA) (<xref target="RFC8362"/>),
     multiple administrative tags may be advertised for all types of prefixes. These administrative
     tags can be used in many applications including (but not limited to):
   </t>
@@ -242,7 +242,7 @@
     When tags are advertised for AS External or NSSA LSA prefixes, the existing tag in
     the OSPFv2 and OSPFv3 AS-External-LSA and NSSA-LSA encodings MUST be utilized for
     the first tag. Additional tags MAY be advertised using the Administrative Tag
-    Sub-TLV speficified in this document. This will facilitate backward compatibility with
+    Sub-TLV specified in this document. This will facilitate backward compatibility with
     implementations that do not support this specification.
   </t>
   <t>
@@ -276,7 +276,7 @@
 <section anchor="ECMP" title="Equal-Cost Multipath Applicability">
   <t>
     When multiple LSAs contribute to an OSPF route, it is possible that these
-    LSAs will all have different tags. In this situation, the OSPF ABR propating the
+    LSAs will all have different tags. In this situation, the OSPF ABR propagating the
     route to other areas with inter-area LSAs MUST associate
     the tags from one of the LSAs contributing a path and, if the implementation supports
     multiple tags, MAY associate tags from multiple contributing LSAs up to the maximum
@@ -412,7 +412,7 @@ module: ietf-ospf-admin-tags
 </section>
 <section title="YANG Data Model for OSPF Prefix Administrative Tags">
 <t>The following is the YANG module:</t>
-<sourcecode name="ietf-ospf-admin-tags@2024-07-22.yang" type="" markers="true"><![CDATA[
+<sourcecode name="ietf-ospf-admin-tags@2025-02-10.yang" type="" markers="true"><![CDATA[
 module ietf-ospf-admin-tags {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-ospf-admin-tags";
@@ -460,7 +460,7 @@ module ietf-ospf-admin-tags {
      This YANG model conforms to the Network Management
      Datastore Architecture (NMDA) as described in RFC 8342.
 
-     Copyright (c) 2024 IETF Trust and the persons identified as
+     Copyright (c) 2025 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -481,7 +481,7 @@ module ietf-ospf-admin-tags {
   reference
     "RFC XXXX";
 
-  revision 2024-07-22 {
+  revision 2025-02-10 {
     description
       "Initial revision.";
     reference
@@ -758,7 +758,7 @@ module ietf-ospf-admin-tags {
       were able to modify
       the admin tags associated with OSPF routes and they were being used for this
       application, such routes could be prevented from being advertised in routing
-      domains where they are required (subtle denial or service) or they could be
+      domains where they are required (subtle denial of service) or they could be
       advertised into routing domains where they shouldn't be advertised (routing
       vulnerability).
       Security considerations for the base OSPF protocol are covered
@@ -864,8 +864,9 @@ reference: RFC XXXX
       tag selection.</t>
    <t>Thanks to Russ White for his Routing Directorate review.</t>
    <t>Thanks to Bruno Decraene and Changwang Lin for working group last call comments.</t>
-   <t>Thanks to Gunter van de Velde for has AD review and commments.</t>
-   <t>Thanks to David Dong for IANA review and commments.</t>
+   <t>Thanks to Gunter van de Velde for has AD review and comments.</t>
+   <t>Thanks to David Dong for IANA review and comments.</t>
+   <t>Thanks to Deb Cooley for review and comments.</t>
    </section>
 </middle>
 <?rfc needLines="20"?>
