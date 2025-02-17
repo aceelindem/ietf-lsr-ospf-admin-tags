@@ -56,7 +56,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-26"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-27"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -233,10 +233,11 @@
 <section anchor="OSPF-OPERATION" title="Protocol Operation">
   <t>An OSPF router supporting this specification MUST be able to advertise and interpret
   at least one tag for all type of prefixes. An OSPF router supporting this
-  specification MAY be able to advertise and propagate multiple tags. The
+  specification MAY be able to advertise prefixes with multiple tags and propagate prefixes
+  with multiple tags between areas. The
   maximum tags that an implementation supports is a local matter depending upon supported
   applications using prefix tags.  Depending on the application, the number of tags supported
-  by the OSPF routers in the OSPF routing domain MAY limit deployment of that application.
+  by the OSPF routers in the OSPF routing domain may limit deployment of that application.
   </t>
   <t>
     When tags are advertised for AS External or NSSA LSA prefixes, the existing tag in
@@ -869,7 +870,7 @@ reference: RFC XXXX
    <t>Thanks to Bruno Decraene and Changwang Lin for working group last call comments.</t>
    <t>Thanks to Gunter van de Velde for has AD review and comments.</t>
    <t>Thanks to David Dong for IANA review and comments.</t>
-   <t>Thanks to Deb Cooley and Roman Danyliw for IESG review and comments.</t>
+   <t>Thanks to Deb Cooley, Roman Danyliw, and John Scudder for IESG review and comments.</t>
    </section>
 </middle>
 <?rfc needLines="20"?>
