@@ -8,6 +8,8 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3101.xml'>
     <!ENTITY RFC3688 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3688.xml'>
+    <!ENTITY RFC4252 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4252.xml'>
     <!ENTITY RFC4271 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4271.xml'>
     <!ENTITY RFC5130 PUBLIC ''
@@ -18,8 +20,8 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6020.xml'>
     <!ENTITY RFC6241 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6241.xml'>
-    <!ENTITY RFC6242 PUBLIC ''
-      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6242.xml'>
+    <!ENTITY RFC6991 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6991.xml'>
     <!ENTITY RFC7684 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7684.xml'>
     <!ENTITY RFC7752 PUBLIC ''
@@ -32,12 +34,16 @@
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml'>
     <!ENTITY RFC8340 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8340.xml'>
+    <!ENTITY RFC8349 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8349.xml'>
     <!ENTITY RFC8341 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8341.xml'>
     <!ENTITY RFC8362 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8362.xml'>
     <!ENTITY RFC8446 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml'>
+    <!ENTITY RFC9000 PUBLIC ''
+      'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9000.xml'>
     <!ENTITY RFC9129 PUBLIC ''
       'http://xml.resource.org/public/rfc/bibxml/reference.RFC.9129.xml'>
     <!ENTITY RFC9513 PUBLIC ''
@@ -56,7 +62,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-27"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-28"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -313,15 +319,20 @@
   </t>
 </section>
 <section title="YANG Data Model">
-  <t>YANG <xref target="RFC7950"></xref> is a data definition language
-      used to define the contents of a conceptual data store
-      that allows networked devices to be managed using NETCONF
-      <xref target="RFC6241"/> or RESTCONF <xref target="RFC8040"/>.</t>
-  <t>This section defines a YANG data model that can be used to configure
+  <t>
+    YANG <xref target="RFC7950"></xref> is a data definition language
+    used to define the contents of a conceptual data store
+    that allows networked devices to be managed using NETCONF
+    <xref target="RFC6241"/> or RESTCONF <xref target="RFC8040"/>.
+  </t>
+  <t>
+    This section defines a YANG data model that can be used to configure
     and manage the prefix administrative tags defined in this document,
-    which augments the OSPF YANG data model <xref target="RFC9129"/> and
-    the OSPFv3 Extended LSA YANG data model
-    <xref target="RFC9587"/>.
+    which augments the OSPF YANG data model <xref target="RFC9129"/>,
+    the OSPFv3 Extended LSA YANG data model <xref target="RFC9587"/>,
+    and the YANG Data Model for Routing Management <xref target="RFC8349"/>.
+    Additionally, the YANG data models defined in <xref target="RFC6991"/>
+    is imported.
   </t>
 
   <section title="Tree for the YANG Data Model">
@@ -335,10 +346,6 @@ module: ietf-ospf-admin-tags
          /ospf:ranges/ospf:range:
    +--rw admin-tags
       +--rw admin-tag*   uint32
- augment /rt:routing/rt:control-plane-protocols
-         /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
-         /ospf:ranges/ospf:range:
-   +--rw admin-tag*   uint32
  augment /rt:routing/rt:control-plane-protocols
          /rt:control-plane-protocol/ospf:ospf/ospf:areas/ospf:area
          /ospf:interfaces/ospf:interface:
@@ -413,7 +420,7 @@ module: ietf-ospf-admin-tags
 </section>
 <section title="YANG Data Model for OSPF Prefix Administrative Tags">
 <t>The following is the YANG module:</t>
-<sourcecode name="ietf-ospf-admin-tags@2025-02-10.yang" type="" markers="true"><![CDATA[
+<sourcecode name="ietf-ospf-admin-tags@2025-02-18.yang" type="" markers="true"><![CDATA[
 module ietf-ospf-admin-tags {
   yang-version 1.1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-ospf-admin-tags";
@@ -480,9 +487,10 @@ module ietf-ospf-admin-tags {
      described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
      they appear in all capitals, as shown here.";
   reference
-    "RFC XXXX";
+    "RFC XXXX: Extensions to OSPF for Advertising Prefix
+               Administrative Tags.";
 
-  revision 2025-02-10 {
+  revision 2025-02-18 {
     description
       "Initial revision.";
     reference
@@ -530,25 +538,6 @@ module ietf-ospf-admin-tags {
       description
         "OSPF prefix administrative tags.";
     }
-  }
-
-  augment "/rt:routing/rt:control-plane-protocols/"
-        + "rt:control-plane-protocol/ospf:ospf/"
-        + "ospf:areas/ospf:area/ospf:ranges/ospf:range" {
-    when "derived-from-or-self(../../../../../"
-       + "rt:type, 'ospf:ospf')" {
-      description
-        "This augments the OSPF routing protocol area range
-         configuration.";
-    }
-    description
-      "This augments summary route configuration with
-       administrative tags.";
-      leaf-list admin-tag {
-        type uint32;
-        description
-          "Administrative tags.";
-      }
   }
 
   augment "/rt:routing/rt:control-plane-protocols/"
@@ -748,31 +737,31 @@ module ietf-ospf-admin-tags {
 </section>
 
 <section title="Security Considerations">
-   <t>This document describes a generic mechanism for advertising
-      administrative tags for OSPF prefixes.
-      The administrative tags are generally less critical
-      than the topology information currently advertised by the base
-      OSPF protocol.
-      The security considerations for the generic mechanism are dependent
-      on their application. One such application is to control leaking of OSPF
-      routes to other protocols (e.g., BGP <xref target="RFC4271"/>). If an attacker
-      were able to modify
-      the admin tags associated with OSPF routes and they were being used for this
-      application, such routes could be prevented from being advertised in routing
-      domains where they are required (subtle denial of service) or they could be
-      advertised into routing domains where they shouldn't be advertised (routing
-      vulnerability).
-      Security considerations for the base OSPF protocol are covered
-      in <xref target="RFC2328"/> and <xref target="RFC5340"/>.
+  <t>
+    This document describes a generic mechanism for advertising
+    administrative tags for OSPF prefixes.
+    The administrative tags are generally less critical
+    than the topology information currently advertised by the base
+    OSPF protocol.
+    The security considerations for the generic mechanism are dependent
+    on their application. One such application is to control leaking of OSPF
+    routes to other protocols (e.g., BGP <xref target="RFC4271"/>). If an attacker
+    were able to modify
+    the admin tags associated with OSPF routes and they were being used for this
+    application, such routes could be prevented from being advertised in routing
+    domains where they are required (subtle denial of service) or they could be
+    advertised into routing domains where they shouldn't be advertised (routing
+    vulnerability).
+    Security considerations for the base OSPF protocol are covered
+    in <xref target="RFC2328"/> and <xref target="RFC5340"/>.
    </t>
    <t>
-     The YANG modules specified in this document define a schema for
-     data that is designed to be accessed via network
-     management protocols such as NETCONF <xref target="RFC6241"/> or
-     RESTCONF <xref target="RFC8040"/>. The lowest NETCONF layer is the secure transport
-     layer, and the mandatory-to-implement secure transport is Secure Shell (SSH)
-     <xref target="RFC6242"/>. The lowest RESTCONF layer is HTTPS, and the
-     mandatory-to-implement secure transport is TLS <xref target="RFC8446"/>.
+     The ietf-ospf-admin-tag YANG module defines a data model that is
+     designed to be accessed via YANG-based management protocols, such as
+     NETCONF <xref target="RFC6241"/> and RESTCONF <xref target="RFC8040"/>.
+     These protocols have to use a secure transport layer (e.g., SSH
+     <xref target="RFC4252"/>, TLS <xref target="RFC8446"/>, and
+     QUIC <xref target="RFC9000"/>) and have to use mutual authentication.  
    </t>
 
    <t>
@@ -871,6 +860,7 @@ reference: RFC XXXX
    <t>Thanks to Gunter van de Velde for has AD review and comments.</t>
    <t>Thanks to David Dong for IANA review and comments.</t>
    <t>Thanks to Deb Cooley, Roman Danyliw, and John Scudder for IESG review and comments.</t>
+   <t>Thanks to Mahesh Jethanandani for an extensive IESG review of the YANG model.</t>
    </section>
 </middle>
 <?rfc needLines="20"?>
@@ -882,14 +872,16 @@ reference: RFC XXXX
       &RFC5340;
       &RFC6020;
       &RFC6241;
-      &RFC6242;
+      &RFC6991;
       &RFC7684;
       &RFC7950;
       &RFC8040;
       &RFC8174;
       &RFC8341;
+      &RFC8349;
       &RFC8362;
       &RFC8446;
+      &RFC9000;
       &RFC9129;
       &RFC9513;
       &RFC9552;
@@ -898,6 +890,7 @@ reference: RFC XXXX
 
 <references title="Informative References">
       &RFC3101;
+      &RFC4252;
       &RFC4271;
       &RFC5130;
       &RFC8340;

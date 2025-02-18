@@ -64,9 +64,10 @@ module ietf-ospf-admin-tags {
      described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
      they appear in all capitals, as shown here.";
   reference
-    "RFC XXXX";
+    "RFC XXXX: Extensions to OSPF for Advertising Prefix
+               Administrative Tags.";
 
-  revision 2025-02-10 {
+  revision 2025-02-18 {
     description
       "Initial revision.";
     reference
@@ -114,25 +115,6 @@ module ietf-ospf-admin-tags {
       description
         "OSPF prefix administrative tags.";
     }
-  }
-
-  augment "/rt:routing/rt:control-plane-protocols/"
-        + "rt:control-plane-protocol/ospf:ospf/"
-        + "ospf:areas/ospf:area/ospf:ranges/ospf:range" {
-    when "derived-from-or-self(../../../../../"
-       + "rt:type, 'ospf:ospf')" {
-      description
-        "This augments the OSPF routing protocol area range
-         configuration.";
-    }
-    description
-      "This augments summary route configuration with
-       administrative tags.";
-      leaf-list admin-tag {
-        type uint32;
-        description
-          "Administrative tags.";
-      }
   }
 
   augment "/rt:routing/rt:control-plane-protocols/"
