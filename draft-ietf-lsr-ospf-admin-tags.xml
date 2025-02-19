@@ -62,7 +62,7 @@
 <?rfc rfcedstyle="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-28"
+<rfc category="std" ipr="trust200902" docName="draft-ietf-lsr-ospf-admin-tags-29"
   consensus="true" submissionType="IETF" version="3">
 
 <front>
@@ -190,7 +190,7 @@
 
 
    Type     A 16-bit field set to:
-                TBD1: "OSPF Extended Prefix TLV Sub-TLV" Registry
+                TBD1: "OSPFv2 Extended Prefix TLV Sub-TLV" Registry
                 TBD2: "OSPFv3 Extended-LSA Sub-TLV" Registry
                 TBD3: "OSPFv3 SRv6 Locator LSA Sub-TLVs" Registry
 
@@ -797,7 +797,7 @@ module ietf-ospf-admin-tags {
 </section>
 <section title="IANA Considerations">
   <t>
-    The following values should be allocated from the "OSPF Extended Prefix TLV
+    The following values should be allocated from the "OSPFv2 Extended Prefix TLV
     Sub-TLV" Registry <xref target="RFC7684"/> in the "Open Shortest Path First v2 (OSPFv2)
     Parameters" group:
   </t>
